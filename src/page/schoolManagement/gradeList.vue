@@ -5,22 +5,14 @@
         <el-form :inline="true" :model="formInline" class="form-inline">
           <el-row>
             <el-col :span="18">
-              <el-form-item style="width:150px;" prop="schoolId">
-                <el-select clearable v-model.trim="formInline.schoolId" placeholder="请选择学校" size="small">
-                  <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in schoolData" :key="`${_uid}_${index}`"
-                    :label="item.name" :value="item.id">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item style="width:120px;" prop="gradeName">
-                <el-input size="small" clearable v-model.trim="formInline.gradeName" placeholder="请输入名称"></el-input>
+              <el-form-item style="width:180px;" prop="gradeName">
+                <el-input size="small" clearable v-model.trim="formInline.gradeName" placeholder="请输入部门名称"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item style="float: right;">
                 <el-button size="small" type="primary" @click="submitForm('formInline')">查询</el-button>
-                <el-button size="small" icon="el-icon-plus" type="default" @click="addUser">添加年级</el-button>
-                <el-button size="small" icon="el-icon-plus" type="default" @click="upgrade">更新年级</el-button>
+                <el-button size="small" icon="el-icon-plus" type="default" @click="addUser">添加部门</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -30,9 +22,7 @@
         <el-table :data="listData" border style="width: 100%">
           <el-table-column prop="rowId" label='序号' width="50">
           </el-table-column>
-          <el-table-column prop="gradeName" label='年级名称'>
-          </el-table-column>
-          <el-table-column prop="schoolName" label='学校名称'>
+          <el-table-column prop="gradeName" label='部门名称'>
           </el-table-column>
           <el-table-column prop="createTime" label='创建时间'>
           </el-table-column>
@@ -46,30 +36,17 @@
       </div>
       <div class="pagination" style="margin-top: 15px;">
         <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[15, 30, 45, 60]" :page-size="100"
-          layout="total, sizes, prev, pager, next, jumper" :total=pageTotal>
+          layout="total, sizes, prev, pager, next, jumper" :total="pageTotal">
         </el-pagination>
       </div>
       <div class="dialogBox">
-        <el-dialog :title="isAdd ? '添加年级' : '编辑年级'" :visible.sync="dialogVisible" :show-close="true" width="750px">
+        <el-dialog :title="isAdd ? '添加部门' : '编辑部门'" :visible.sync="dialogVisible" :show-close="true" width="750px">
           <div class="wrapper">
             <el-form :model="form" :rules="rules" label-width="120px" ref="ruleForm">
               <el-row>
                 <el-col :span="10">
-                  <el-form-item label="学校：" v-show="isAdd == true || form.parentId == ''" prop="schoolId">
-                    <el-select v-model.trim="form.schoolId" placeholder="请选择学校" style="width:150px;" size="small">
-                      <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in schoolData" :key="`${_uid}_${index}`"
-                        :label="item.name" :value="item.id">
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item label="年级名称：" v-show="isAdd == true || form.parentId == ''" prop="gradeName">
-                    <el-input size="small" clearable v-model.trim="form.gradeName" placeholder="请输入年级名称" style="width:180px;"></el-input>
-                  </el-form-item>
-                  <el-form-item label="年级名称：" v-show="isAdd == false && form.parentId != ''">
-                    <span>{{form.gradeName}}</span>
-                  </el-form-item>
-                  <el-form-item label="等级：" v-show="isAdd == true || form.parentId == ''" prop="code">
-                    <el-input size="small" clearable v-model.trim="form.code" placeholder="请输入等级" style="width:180px;"></el-input>
+                  <el-form-item label="部门名称：" prop="gradeName">
+                    <el-input size="small" clearable v-model.trim="form.gradeName" placeholder="请输入部门名称" style="width:180px;"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="14">
@@ -97,12 +74,9 @@ export default {
       dialogVisible: false,
       form: {
         id: '',
-        schoolId: '',
         gradeName: '',
-        code: '',
       },
       formInline: {
-        schoolId: '',
         gradeName: '',
       },
       schoolData: [],
@@ -111,14 +85,8 @@ export default {
       pageSize: 15,
       pageTotal: 0,
       rules: {
-        classId: [
-          { required: true, message: '请选择班级', trigger: ['blur', 'change'] },
-        ],
-        studentName: [
-          { required: true, message: '请输入姓名', trigger: ['blur', 'change'] },
-        ],
-        menuRole: [
-          { required: true, message: '请选择菜单', trigger: ['blur', 'change'] },
+        gradeName: [
+          { required: true, message: '请输入部门名称', trigger: ['blur', 'change'] },
         ],
       }
     }
@@ -126,7 +94,6 @@ export default {
   methods: {
     getGradeList (pageIndex = 1, pageSize = 15) {
       let datas = {
-        schoolId: Number(this.formInline.schoolId),
         gradeName: this.formInline.gradeName,
         pageIndex: pageIndex,
         pageSize: pageSize
@@ -142,8 +109,6 @@ export default {
               rowId: rowId,
               id: el.id,
               gradeName: el.gradeName,
-              schoolName: el.schoolName,
-              dinerCount: el.dinerCount,
               createTime: el.createTime,
 
             });
@@ -151,37 +116,13 @@ export default {
           });
           total = res.data.total;
         }
-        console.log(list);
         this.listData = list;
         this.pageTotal = total;
       });
     },
-    changeAreaList () {
-      this.form.classId = '';
-      this.form.cabinetGroup = '';
-      this.getClassByAreaList();
-    },
-    getSchoolSelect () {
-      PublicModule.getSchoolSelect().then(res => {
-        if (res.data) {
-          let list = [];
-          res.data.list.forEach((el, i) => {
-            list.push({
-
-              id: el.id,
-              name: el.schoolName,
-
-            });
-          });
-          this.schoolData = list;
-        }
-      });
-    },
     addGradeInfo () {
       let datas = {
-        schoolId: Number(this.form.schoolId),
         gradeName: this.form.gradeName,
-        code: this.form.code,
       };
       SchoolModule.addGradeInfo(datas).then(res => {
         if (res.data) {
@@ -192,15 +133,10 @@ export default {
             });
             this.dialogVisible = false;
             this.getGradeList();
-          } else if (res.data.err == 1) {
+          } else {
             this.$message({
               type: 'error',
-              message: '请选择班级!'
-            });
-          } else if (res.data.err == 2) {
-            this.$message({
-              type: 'error',
-              message: '请选择菜单!'
+              message: '保存失败!'
             });
           }
         }
@@ -213,34 +149,6 @@ export default {
             this.$message({
               type: 'success',
               message: '删除成功!'
-            });
-            this.getGradeList();
-          }
-        }
-      });
-    },
-    upgrade () {
-      this.$confirm(`是否确定更新全部用餐人员的年级?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.updateGradeUpgrade();
-        // 成功后回掉
-      }).catch(() => {
-        // this.$message({
-        //     type: 'info',
-        //     message: '已取消删除'
-        // });          
-      });
-    },
-    updateGradeUpgrade () {
-      SchoolModule.updateGradeUpgrade().then(res => {
-        if (res.data) {
-          if (res.data.err == 0) {
-            this.$message({
-              type: 'success',
-              message: '更新成功!'
             });
             this.getGradeList();
           }
@@ -260,15 +168,7 @@ export default {
     // 添加用户
     addUser () {
       this.isAdd = true;
-      this.form.id = '';
-      this.parentId = '';
-      this.form.schoolAreaId = '';
-      this.form.classId = '';
-      this.form.cabinetGroup = '';
-      this.form.studentName = '';
-      this.form.studentNumber = '';
-      this.form.phoneNumber = '';
-      this.form.menuRole = this.menuRole;
+      this.form.gradeName = '';
       this.dialogVisible = true;
 
       if (this.$refs['ruleForm']) {
@@ -293,7 +193,7 @@ export default {
     },
     // 删除用户
     deleteUser (row) {
-      this.$confirm(`是否删除id为:${row.id}的用户?`, '提示', {
+      this.$confirm(`是否删除部门?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -318,7 +218,6 @@ export default {
     },
   },
   mounted () {
-    this.getSchoolSelect();
     this.getGradeList();
   }
 }

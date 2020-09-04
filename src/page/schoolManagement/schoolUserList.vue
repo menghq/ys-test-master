@@ -5,13 +5,6 @@
         <el-form :inline="true" :model="formInline" class="form-inline">
           <el-row>
             <el-col :span="18">
-              <el-form-item style="width:150px;" prop="schoolId">
-                <el-select clearable v-model.trim="formInline.schoolId" placeholder="请选择学校" size="small">
-                  <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in schoolData" :key="`${_uid}_${index}`"
-                    :label="item.name" :value="item.id">
-                  </el-option>
-                </el-select>
-              </el-form-item>
               <el-form-item prop="userName" style="width:150px;">
                 <el-input size="small" clearable v-model.trim="formInline.userName" placeholder="请输入用户名">
                 </el-input>
@@ -20,7 +13,7 @@
             <el-col :span="6">
               <el-form-item style="float: right;">
                 <el-button size="small" type="primary" @click="submitForm('formInline')">查询</el-button>
-                <el-button size="small" icon="el-icon-plus" type="default" @click="addUser">添加管理员</el-button>
+                <el-button size="small" icon="el-icon-plus" type="default" @click="addUser">添加后厨</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -42,7 +35,6 @@
           </el-table-column>
           <el-table-column prop="status" width="60" label='状态'>
           </el-table-column>
-
           <el-table-column fixed="right" style="display:none;" align="center" label="操作" width="100">
             <template slot-scope="scope">
               <el-button @click="goToDetail(scope.row.id)" type="text" size="small">详情</el-button>

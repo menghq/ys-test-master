@@ -11,7 +11,7 @@
     </div>
     <div class="ms-login">
       <div>
-        <div class="ms-title">中央厨房总管理系统</div>
+        <div class="ms-title">霍州煤电集团吕临能化有限公司食堂管理系统</div>
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="ms-content">
           <el-form-item prop="username">
             <el-input v-model="ruleForm.username" placeholder="用户名" maxlength="16">

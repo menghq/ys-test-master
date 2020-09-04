@@ -30,7 +30,7 @@ export default {
     return {
       username: sessionStorage.getItem('userName'),
       roleName: sessionStorage.getItem('roleName'),
-      pageTitle: "中央厨房总管理系统",
+      pageTitle: "霍州煤电集团吕临能化有限公司食堂管理系统",
       isCollapse: false,
       changeBarDirection: false
     };
@@ -89,7 +89,7 @@ export default {
   justify-content: center;
 }
 .logo {
-  width: 400px;
+  width: 600px;
   transition: width 0.5s linear;
   img {
     height: 58px;

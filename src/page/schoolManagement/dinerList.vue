@@ -5,23 +5,9 @@
         <el-form :inline="true" :model="formInline" class="form-inline">
           <el-row>
             <el-col :span="18">
-              <el-form-item style="width:150px;" prop="schoolId">
-                <el-select clearable v-model.trim="formInline.schoolId" placeholder="请选择学校" @change="getGradeSelect" size="small">
-                  <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in schoolData" :key="`${_uid}_${index}`"
-                    :label="item.name" :value="item.id">
-                  </el-option>
-                </el-select>
-              </el-form-item>
               <el-form-item style="width:150px;" prop="gradeId">
-                <el-select clearable v-model.trim="formInline.gradeId" placeholder="请选择年级" @change="getClassSelect" size="small">
+                <el-select clearable v-model.trim="formInline.gradeId" placeholder="请选择部门" size="small">
                   <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in gradeData" :key="`${_uid}_${index}`"
-                    :label="item.name" :value="item.id">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item style="width:150px;" prop="classId">
-                <el-select clearable v-model.trim="formInline.classId" placeholder="请选择班级" size="small">
-                  <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in classData" :key="`${_uid}_${index}`"
                     :label="item.name" :value="item.id">
                   </el-option>
                 </el-select>
@@ -37,7 +23,6 @@
               <el-form-item style="float: right;">
                 <el-button size="small" type="primary" @click="submitForm('formInline')">查询</el-button>
                 <el-button size="small" icon="el-icon-plus" type="default" @click="addUser">添加人员</el-button>
-                <el-button size="small" icon="el-icon-plus" type="default" @click="importUser">导入人员</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -49,11 +34,7 @@
           </el-table-column>
           <el-table-column prop="dinerName" label='姓名'>
           </el-table-column>
-          <el-table-column prop="schoolName" label='学校'>
-          </el-table-column>
-          <el-table-column prop="gradeName" label='年级'>
-          </el-table-column>
-          <el-table-column prop="className" label='班级'>
+          <el-table-column prop="gradeName" label='部门'>
           </el-table-column>
           <el-table-column prop="money" label='余额'>
           </el-table-column>
@@ -76,26 +57,14 @@
         </el-pagination>
       </div>
       <div class="dialogBox">
-        <el-dialog :title="isAdd ? '添加用户' : '编辑用户'" :visible.sync="dialogVisible" :show-close="true" width="750px">
+        <el-dialog :title="isAdd ? '添加人员' : '编辑人员'" :visible.sync="dialogVisible" :show-close="true" width="750px">
           <div class="wrapper">
             <el-form :model="form" :rules="rules" label-width="120px" ref="ruleForm">
               <el-row>
                 <el-col :span="24">
-                  <el-form-item label="班级：" prop="classId">
-                    <el-select v-model.trim="form.schoolId" placeholder="请选择学校" @change="getFormGradeSelect" style="width:150px;"
-                      size="small">
-                      <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in form.schoolData"
-                        :key="`${_uid}_${index}`" :label="item.name" :value="item.id">
-                      </el-option>
-                    </el-select>
-                    <el-select v-model.trim="form.gradeId" placeholder="请选择年级" style="width:150px;" @change="getFormClassSelect"
-                      size="small">
+                  <el-form-item label="部门：" prop="classId">
+                    <el-select v-model.trim="form.gradeId" placeholder="请选择部门" style="width:150px;" size="small">
                       <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in form.gradeData" :key="`${_uid}_${index}`"
-                        :label="item.name" :value="item.id">
-                      </el-option>
-                    </el-select>
-                    <el-select v-model.trim="form.classId" placeholder="请选择班级" style="width:150px;" size="small">
-                      <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in form.classData" :key="`${_uid}_${index}`"
                         :label="item.name" :value="item.id">
                       </el-option>
                     </el-select>
@@ -107,8 +76,7 @@
                     <el-input size="small" clearable v-model.trim="form.mobilePhone" placeholder="请输入电话号码" style="width:180px;"></el-input>
                   </el-form-item>
                   <el-form-item label="状态：" prop="status">
-                    <el-select v-model.trim="form.status" placeholder="请选择状态" style="width:150px;"
-                      size="small">
+                    <el-select v-model.trim="form.status" placeholder="请选择状态" style="width:150px;" size="small">
                       <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in statusArr" :key="`${_uid}_${index}`"
                         :label="item" :value="index">
                       </el-option>
@@ -122,31 +90,6 @@
           <span slot="footer" class="dialog-footer">
             <el-button @click="cancelForm('ruleForm')" size="mini">取 消</el-button>
             <el-button type="primary" @click="submitAddForm('ruleForm')" size="mini">确 定</el-button>
-          </span>
-        </el-dialog>
-      </div>
-      <div class="importDialogBox">
-        <el-dialog title="导入人员" :visible.sync="importDialogVisible" :show-close="true" width="750px">
-          <div class="wrapper">
-            <el-form :model="form" :rules="rules" label-width="120px" ref="ruleForm">
-              <el-row>
-                <el-col :span="24">
-                  <el-form-item label="Excel文件：" prop="file">
-                    <el-upload class="upload-demo" drag action="" :auto-upload="false" :show-file-list="false"
-                      :on-change="handleImportPreview">
-                      <i class="el-icon-upload"></i>
-                      <div class="el-upload__text" v-if="formImport.previewName==''">将文件拖到此处，或<em>点击上传</em></div>
-                      <div class="el-upload__text" v-else>{{formImport.previewName}}</div>
-                      <div class="el-upload__tip" slot="tip">只能上传Excel文件，且不超过500kb</div>
-                    </el-upload>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-form>
-          </div>
-          <span slot="footer" class="dialog-footer">
-            <el-button @click="cancelImportForm('ruleForm')" size="mini">取 消</el-button>
-            <el-button type="primary" @click="submitImportForm('ruleForm')" size="mini">确 定</el-button>
           </span>
         </el-dialog>
       </div>
@@ -197,8 +140,8 @@ export default {
       pageSize: 15,
       pageTotal: 0,
       rules: {
-        classId: [
-          { required: true, message: '请选择班级', trigger: ['blur', 'change'] },
+        gradeId: [
+          { required: true, message: '请选择部门', trigger: ['blur', 'change'] },
         ],
         studentName: [
           { required: true, message: '请输入姓名', trigger: ['blur', 'change'] },
@@ -209,9 +152,7 @@ export default {
   methods: {
     getDinerList (pageIndex = 1, pageSize = 15) {
       let datas = {
-        schoolId: Number(this.formInline.schoolId),
         gradeId: Number(this.formInline.gradeId),
-        classId: Number(this.formInline.classId),
         dinerName: this.formInline.dinerName,
         mobilePhone: this.formInline.mobilePhone,
         pageIndex: pageIndex,
@@ -228,9 +169,7 @@ export default {
               rowId: rowId,
               id: el.id,
               dinerName: el.dinerName,
-              schoolName: el.schoolName,
               gradeName: el.gradeName,
-              className: el.className,
               money: el.money,
               status: this.statusArr[el.status],
               createTime: el.createTime,
@@ -240,33 +179,13 @@ export default {
           });
           total = res.data.total;
         }
-        console.log(list);
         this.listData = list;
         this.pageTotal = total;
-      });
-    },
-    getSchoolSelect () {
-      this.gradeData = [];
-      this.classData = [];
-      PublicModule.getSchoolSelect().then(res => {
-        if (res.data) {
-          let list = [];
-          res.data.list.forEach((el, i) => {
-            list.push({
-
-              id: el.id,
-              name: el.schoolName,
-
-            });
-          });
-          this.schoolData = list;
-        }
       });
     },
     getGradeSelect () {
       this.classData = [];
       let datas = {
-        schoolId: Number(this.formInline.schoolId),
       };
       PublicModule.getGradeSelect(datas).then(res => {
         if (res.data) {
@@ -283,48 +202,9 @@ export default {
         }
       });
     },
-    getClassSelect () {
-      let datas = {
-        schoolId: Number(this.formInline.schoolId),
-        gradeId: Number(this.formInline.gradeId),
-      };
-      PublicModule.getClassSelect(datas).then(res => {
-        if (res.data) {
-          let list = [];
-          res.data.list.forEach((el, i) => {
-            list.push({
-
-              id: el.id,
-              name: el.className,
-
-            });
-          });
-          this.classData = list;
-        }
-      });
-    },
-    getFormSchoolSelect () {
-      this.form.gradeData = [];
-      this.form.classData = [];
-      PublicModule.getSchoolSelect().then(res => {
-        if (res.data) {
-          let list = [];
-          res.data.list.forEach((el, i) => {
-            list.push({
-
-              id: el.id,
-              name: el.schoolName,
-
-            });
-          });
-          this.form.schoolData = list;
-        }
-      });
-    },
     getFormGradeSelect () {
       this.form.classData = [];
       let datas = {
-        schoolId: Number(this.form.schoolId),
       };
       PublicModule.getGradeSelect(datas).then(res => {
         if (res.data) {
@@ -341,54 +221,24 @@ export default {
         }
       });
     },
-    getFormClassSelect () {
-      let datas = {
-        schoolId: Number(this.form.schoolId),
-        gradeId: Number(this.form.gradeId),
-      };
-      PublicModule.getClassSelect(datas).then(res => {
-        if (res.data) {
-          let list = [];
-          res.data.list.forEach((el, i) => {
-            list.push({
-
-              id: el.id,
-              name: el.className,
-
-            });
-          });
-          this.form.classData = list;
-        }
-      });
-    },
     getDinerInfo (id) {
       SchoolModule.getDinerInfo(id).then(res => {
         if (res.data) {
           let data = res.data;
           this.form.id = data.id;
-          this.form.schoolId = data.schoolId;
-          this.form.schoolName = data.schoolName;
           this.form.gradeId = data.gradeId;
           this.form.gradeName = data.gradeName;
-          this.form.classId = data.classId;
-          this.form.className = data.className;
           this.form.dinerName = data.dinerName;
           this.form.mobilePhone = data.mobilePhone;
           this.form.status = data.status + "";
 
-          console.log(this.form);
-
-          this.getFormSchoolSelect();
           this.getFormGradeSelect();
-          this.getFormClassSelect();
         }
       });
     },
     addDinerInfo () {
       let datas = {
-        schoolId: Number(this.form.schoolId),
         gradeId: Number(this.form.gradeId),
-        classId: Number(this.form.classId),
         dinerName: this.form.dinerName,
         mobilePhone: this.form.mobilePhone,
         status: this.form.status,
@@ -402,15 +252,10 @@ export default {
             });
             this.dialogVisible = false;
             this.getDinerList();
-          } else if (res.data.err == 1) {
+          } else {
             this.$message({
               type: 'error',
-              message: '请选择班级!'
-            });
-          } else if (res.data.err == 2) {
-            this.$message({
-              type: 'error',
-              message: '请选择菜单!'
+              message: '保存失败!'
             });
           }
         }
@@ -419,9 +264,7 @@ export default {
     updateDinerInfo () {
       let datas = {
         id: this.form.id,
-        schoolId: Number(this.form.schoolId),
         gradeId: Number(this.form.gradeId),
-        classId: Number(this.form.classId),
         dinerName: this.form.dinerName,
         mobilePhone: this.form.mobilePhone,
         status: this.form.status,
@@ -462,12 +305,6 @@ export default {
         }
       });
     },
-    // 重置
-    resetForm () {
-      this.formInline.userName = '';
-      this.formInline.schoolAreaId = '';
-      this.formInline.studentType = '';
-    },
     // 查询
     submitForm () {
       this.getDinerList();
@@ -475,13 +312,9 @@ export default {
     getUser (row) {
       this.isAdd = false;
       this.form.id = '';
-      this.parentId = '';
-      this.form.schoolAreaId = '';
-      this.form.classId = '';
-      this.form.cabinetGroup = '';
-      this.form.studentName = '';
-      this.form.studentNumber = '';
-      this.form.phoneNumber = '';
+      this.form.gradeId = '';
+      this.form.dinerName = '';
+      this.form.mobilePhone = '';
       this.form.status = '';
       this.dialogVisible = true;
 
@@ -495,62 +328,15 @@ export default {
     addUser () {
       this.isAdd = true;
       this.form.id = '';
-      this.form.schoolId = '';
       this.form.gradeId = '';
-      this.form.classId = '';
       this.form.dinerName = '';
-      this.form.phoneNumber = '';
+      this.form.mobilePhone = '';
       this.dialogVisible = true;
-      this.getFormSchoolSelect();
+      this.getFormGradeSelect();
 
       if (this.$refs['ruleForm']) {
         this.$refs['ruleForm'].resetFields();
       }
-    },
-    importUser () {
-      this.isAdd = true;
-      this.form.id = '';
-      this.parentId = '';
-      this.form.schoolAreaId = '';
-      this.form.classId = '';
-      this.form.cabinetGroup = '';
-      this.form.studentName = '';
-      this.form.studentNumber = '';
-      this.form.phoneNumber = '';
-      this.importDialogVisible = true;
-
-      if (this.$refs['ruleForm']) {
-        this.$refs['ruleForm'].resetFields();
-      }
-    },
-    importDiner () {
-      let datas = {
-        file: this.formImport.file,
-      };
-      OrderModule.importDiner(datas).then(res => {
-        if (res.data) {
-          if (res.data.err == 0) {
-            let total = res.data.total;
-            let success = res.data.success;
-            this.$message({
-              type: 'success',
-              message: '导入成功!总行数：' + total + ",成功数：" + success
-            });
-            this.importDialogVisible = false;
-            this.getDinerList();
-          } else if (res.data.err == 1) {
-            this.$message({
-              type: 'error',
-              message: '上传文件类型必须为XLXS!'
-            });
-          } else if (res.data.err == 2) {
-            this.$message({
-              type: 'error',
-              message: '上传文件不能超过2M!'
-            });
-          }
-        }
-      });
     },
     // 提交添加用户
     submitAddForm (formName) {
@@ -583,12 +369,9 @@ export default {
     cancelForm (formName) {
       this.dialogVisible = false;
     },
-    cancelImportForm (formName) {
-      this.importDialogVisible = false;
-    },
     // 删除用户
     deleteUser (row) {
-      this.$confirm(`是否删除id为:${row.id}的用户?`, '提示', {
+      this.$confirm(`是否删除人员?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -601,45 +384,6 @@ export default {
         // });         
       });
     },
-    handleImportPreview (file) {
-      console.log(file);
-
-      const isJPG = file.raw.type === 'application/vnd.ms-excel';
-      const isLt2M = file.raw.size / 1024 / 1024 < 2;
-
-      if (!isJPG) {
-        this.$message.error('上传文件只能是 Excel 格式!');
-        return;
-      }
-      if (!isLt2M) {
-        this.$message.error('上传文件大小不能超过 2MB!');
-        return;
-      }
-
-      this.getBase64(file.raw).then(res => {
-        const params = res.split(',')
-        if (params.length > 0) {
-          this.formImport.previewName = file.name;
-          this.formImport.file = res;
-        }
-      })
-    },
-    getBase64 (file) {
-      return new Promise(function (resolve, reject) {
-        const reader = new FileReader()
-        let imgResult = ''
-        reader.readAsDataURL(file)
-        reader.onload = function () {
-          imgResult = reader.result
-        }
-        reader.onerror = function (error) {
-          reject(error)
-        }
-        reader.onloadend = function () {
-          resolve(imgResult)
-        }
-      })
-    },
     // 分页
     handleSizeChange (val) {
       this.pageSize = val;
@@ -651,7 +395,7 @@ export default {
     },
   },
   mounted () {
-    this.getSchoolSelect();
+    this.getGradeSelect();
     this.getDinerList();
   }
 }

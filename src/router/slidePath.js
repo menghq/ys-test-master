@@ -20,43 +20,21 @@ export default [
     role: ["user", "all"],
     sliderShow: true,
     meta: {
-      title: '学校管理',
+      title: '用餐管理',
       icon: 'el-icon-user-solid'
     },
     component: contentMain,
     children: [
-      {
-        path: 'schoolList',
-        name: 'schoolList',
-        role: ["user", "all"],
-        sliderShow: true,
-        meta: {
-          title: '学校列表',
-          icon: 'el-icon-food', //el-icon-truck
-        },
-        component: () => import('@/page/schoolManagement/schoolList'),
-      },
       {
         path: 'gradeList',
         name: 'gradeList',
         role: ["user", "all"],
         sliderShow: true,
         meta: {
-          title: '年级列表',
+          title: '部门列表',
           icon: 'el-icon-food', //el-icon-truck
         },
         component: () => import('@/page/schoolManagement/gradeList'),
-      },
-      {
-        path: 'classList',
-        name: 'classList',
-        role: ["user", "all"],
-        sliderShow: true,
-        meta: {
-          title: '班级列表',
-          icon: 'el-icon-food', //el-icon-truck
-        },
-        component: () => import('@/page/schoolManagement/classList'),
       },
       {
         path: 'dinerList',
@@ -68,17 +46,6 @@ export default [
           icon: 'el-icon-food', //el-icon-truck
         },
         component: () => import('@/page/schoolManagement/dinerList'),
-      },
-      {
-        path: 'schoolUserList',
-        name: 'schoolUserList',
-        role: ["user", "all"],
-        sliderShow: true,
-        meta: {
-          title: '管理员列表',
-          icon: 'el-icon-food', //el-icon-truck
-        },
-        component: () => import('@/page/schoolManagement/schoolUserList'),
       }]
   },
   {
@@ -87,33 +54,11 @@ export default [
     role: ["user", "all"],
     sliderShow: true,
     meta: {
-      title: '供应商管理',
+      title: '食堂管理',
       icon: 'el-icon-hot-water'
     },
     component: contentMain,
     children: [
-      {
-        path: 'kitchenList',
-        name: 'kitchenList',
-        role: ["user", "all"],
-        sliderShow: true,
-        meta: {
-          title: '供应商列表',
-          icon: 'el-icon-food', //el-icon-truck
-        },
-        component: () => import('@/page/foodManagement/kitchenList'),
-      },
-      {
-        path: "licenseList",
-        name: "licenseList",
-        role: ["user", "all"],
-        sliderShow: true,
-        meta: {
-          title: "供应商资质",
-          icon: "el-icon-food" //el-icon-truck
-        },
-        component: () => import("@/page/foodManagement/licenseList"),
-      },
       {
         path: 'foodList',
         name: 'foodList',
@@ -131,7 +76,7 @@ export default [
         role: ["user", "all"],
         sliderShow: true,
         meta: {
-          title: '管理员列表',
+          title: '后厨列表',
           icon: 'el-icon-food', //el-icon-truck
         },
         component: () => import('@/page/foodManagement/kitchenUserList'),
@@ -149,39 +94,6 @@ export default [
     component: contentMain,
     children: [
       {
-        path: 'menuList',
-        name: 'menuList',
-        role: ["user", "all"],
-        sliderShow: true,
-        meta: {
-          title: '菜单列表',
-          icon: 'el-icon-s-custom', //el-icon-truck
-        },
-        component: () => import('@/page/foodManagement/menuList'),
-      },
-      {
-        path: 'assignList',
-        name: 'assignList',
-        role: ["user", "all"],
-        sliderShow: true,
-        meta: {
-          title: '配餐管理',
-          icon: 'el-icon-food', //el-icon-truck
-        },
-        component: () => import('@/page/orderManagement/assignList'),
-      },
-      {
-        path: 'stopList',
-        name: 'stopList',
-        role: ["user", "all"],
-        sliderShow: true,
-        meta: {
-          title: '停餐管理',
-          icon: 'el-icon-food', //el-icon-truck
-        },
-        component: () => import('@/page/orderManagement/stopList'),
-      },
-      {
         path: 'orderList',
         name: 'orderList',
         role: ["user", "all"],
@@ -191,17 +103,6 @@ export default [
           icon: 'el-icon-food', //el-icon-truck
         },
         component: () => import('@/page/orderManagement/orderList'),
-      },
-      {
-        path: 'userManagement',
-        name: 'userManagement',
-        role: ["user", "all"],
-        sliderShow: true,
-        meta: {
-          title: '评价管理',
-          icon: 'el-icon-food', //el-icon-truck
-        },
-        component: () => import('@/page/orderManagement/commentList'),
       }]
   },
   {
@@ -227,17 +128,6 @@ export default [
         component: () => import('@/page/financeManagement/transactionList'),
       },
       {
-        path: 'withdrawList',
-        name: 'withdrawList',
-        role: ["user", "all"],
-        sliderShow: true,
-        meta: {
-          title: '提现申请',
-          icon: 'el-icon-food', //el-icon-truck
-        },
-        component: () => import('@/page/financeManagement/withdrawList'),
-      },
-      {
         path: 'statementList',
         name: 'statementList',
         role: ["user", "all"],
@@ -248,41 +138,6 @@ export default [
         },
         component: () => import('@/page/financeManagement/statementList'),
       }]
-  },
-  {
-    path: "/attachmentManagement",
-    name: "attachmentManagement",
-    role: ["user", "all"],
-    sliderShow: true,
-    meta: {
-      title: "食品安全文件",
-      icon: "el-icon-paperclip"
-    },
-    component: contentMain,
-    children: [
-      {
-        path: "legalList",
-        name: "legalList",
-        role: ["user", "all"],
-        sliderShow: true,
-        meta: {
-          title: "法律法规",
-          icon: "el-icon-food" //el-icon-truck
-        },
-        component: () => import("@/page/attachmentManagement/legalList"),
-      },
-      {
-        path: "manageList",
-        name: "manageList",
-        role: ["user", "all"],
-        sliderShow: true,
-        meta: {
-          title: "管理文档",
-          icon: "el-icon-food" //el-icon-truck
-        },
-        component: () => import("@/page/attachmentManagement/manageList")
-      },
-    ]
   },
   {
     path: '/systemManagement',

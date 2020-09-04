@@ -12,8 +12,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/apis': {
-        // target: 'http://localhost:8088/apis/', // 接口域名
-        target: 'http://cherry-admin.food-edu.net/apis/', // 接口域名
+        target: 'http://localhost:8088/apis/', // 接口域名
+        // target: 'http://cherry-admin.food-edu.net/apis/', // 接口域名
         ws: true,
         changeOrigin: false, //是否跨域
         pathRewrite: {

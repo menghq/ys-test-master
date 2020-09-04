@@ -5,13 +5,6 @@
         <el-form :inline="true" :model="formInline" class="form-inline">
           <el-row>
             <el-col :span="18">
-              <el-form-item style="width:150px;" prop="kitchenId">
-                <el-select clearable v-model.trim="formInline.kitchenId" placeholder="请选择供应商" size="small">
-                  <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in kitchenData" :key="`${_uid}_${index}`"
-                    :label="item.name" :value="item.id">
-                  </el-option>
-                </el-select>
-              </el-form-item>
               <el-form-item prop="userName" style="width:150px;">
                 <el-input size="small" clearable v-model.trim="formInline.userName" placeholder="请输入用户名">
                 </el-input>
@@ -20,7 +13,7 @@
             <el-col :span="6">
               <el-form-item style="float: right;">
                 <el-button size="small" type="primary" @click="submitForm('formInline')">查询</el-button>
-                <el-button size="small" icon="el-icon-plus" type="default" @click="addUser">添加管理员</el-button>
+                <el-button size="small" icon="el-icon-plus" type="default" @click="addUser">添加后厨</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -29,8 +22,6 @@
       <div class="tableCom" style="margin-top: 15px;">
         <el-table :data="listData" border style="width: 100%">
           <el-table-column prop="rowId" label='序号' width="50">
-          </el-table-column>
-          <el-table-column prop="kitchenName" width="200" label='供应商'>
           </el-table-column>
           <el-table-column prop="userName" width="200" label='用户名'>
           </el-table-column>
@@ -64,16 +55,6 @@
                 <el-row>
                   <el-col :span="12">
                     <div class="grid-content bg-purple">
-                      <el-form-item label="供应商：" v-if="isAdd == true" prop="kitchenId">
-                        <el-select v-model.trim="form.kitchenId" placeholder="请选择供应商" style="width:150px;" size="small">
-                          <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in form.kitchenData"
-                            :key="`${_uid}_${index}`" :label="item.name" :value="item.id">
-                          </el-option>
-                        </el-select>
-                      </el-form-item>
-                      <el-form-item v-else label="供应商：">
-                        {{form.kitchenName}}
-                      </el-form-item>
                       <el-form-item label="用户名：" v-if="isAdd == true" prop="userName">
                         <el-input size="small" clearable v-model.trim="form.userName" placeholder="请输入用户名" style="width:180px;"></el-input>
                       </el-form-item>
@@ -151,17 +132,13 @@ export default {
         userName: '',
         newPassword: '',
         repeatPassword: '',
-        kitchenName: '',
-        kitchenId: '',
-        roleId: "",
+        roleId: 0,
         fullName: '',
         mobilePhone: '',
-        roleId: 0,
         status: 1,
         kitchenData: [],
       },
       formInline: {
-        kitchenId: '',
         userName: '',
       },
       statusArr: {
@@ -172,7 +149,6 @@ export default {
         '1': '子账号',
         '0': '主账号'
       },
-      kitchenData: [],
       roleData: [],
       listData: [],
       pageIndex: 1,
@@ -180,9 +156,6 @@ export default {
       pageTotal: 0,
       newPasswordProp: null,
       rules: {
-        kitchenId: [
-          { required: true, message: '请选择供应商', trigger: 'change' },
-        ],
         userName: [
           { required: true, message: '请输入用户名', trigger: ['blur', 'change'] },
           { required: true, pattern: /^[0-9a-z_]+$/, message: '用户名只能包含小写字母、数字和下划线', trigger: ['blur', 'change'] },
@@ -199,7 +172,7 @@ export default {
           { required: false, trigger: ['blur', 'change'], validator: validateRepeatPassword }
         ],
         roleId: [
-          { required: true, message: '请选择角色', trigger: 'change' },
+          { required: true, message: '请选择权限', trigger: 'change' },
         ],
       }
     }
@@ -207,7 +180,6 @@ export default {
   methods: {
     getKitchenUserList (pageIndex = 1, pageSize = 15) {
       let datas = {
-        kitchenId: Number(this.formInline.kitchenId),
         userName: this.formInline.userName,
         pageIndex: pageIndex,
         pageSize: pageSize
@@ -222,7 +194,6 @@ export default {
 
               rowId: rowId,
               id: el.id,
-              kitchenName: el.kitchenName,
               userName: el.userName,
               roleName: el.roleName,
               fullName: el.fullName,
@@ -236,7 +207,6 @@ export default {
           });
           total = res.data.total;
         }
-        console.log(list);
         this.listData = list;
         this.pageTotal = total;
       });
@@ -249,8 +219,6 @@ export default {
           let info = {
 
             id: data.id,
-            kitchenId: data.kitchenId,
-            kitchenName: data.kitchenName,
             userName: data.userName,
             roleId: data.roleId,
             fullName: data.fullName,
@@ -262,13 +230,11 @@ export default {
           };
 
           this.form = info;
-          this.getFormKitchenSelect();
         }
       });
     },
     addKitchenUserInfo () {
       let data = {
-        kitchenId: this.form.kitchenId,
         userName: this.form.userName,
         newPassword: this.form.newPassword,
         repeatPassword: this.form.repeatPassword,
@@ -304,7 +270,6 @@ export default {
         roleId: Number(this.form.roleId),
         fullName: this.form.fullName,
         mobilePhone: this.form.mobilePhone,
-        roleId: this.form.roleId,
         status: this.form.status,
       };
       OrderModule.updateKitchenUserInfo(data).then(res => {
@@ -350,15 +315,12 @@ export default {
 
       this.form = {
         id: 0,
-        kitchenId: '',
-        kitchenName: '',
         userName: '',
         newPassword: '',
         repeatPassword: '',
-        roleId: "",
+        roleId: 0,
         fullName: '',
         mobilePhone: '',
-        roleId: 0,
         status: 1,
         kitchenData: [],
       };
@@ -369,16 +331,14 @@ export default {
     },
     // 添加用户
     addUser () {
-      this.formTitle = "新增供应商用户";
+      this.formTitle = "新增后厨用户";
       this.isAdd = true;
       this.dialogVisible = true;
       this.clearForm();
       this.newPasswordProp = this.rules.newPasswordAdd;
-      this.getFormKitchenSelect();
-      console.log(this.form);
     },
     goToDetail (id) {
-      this.formTitle = "编辑供应商用户";
+      this.formTitle = "编辑后厨用户";
       this.isAdd = false;
       this.dialogVisible = true;
       this.clearForm();
@@ -405,41 +365,9 @@ export default {
     cancelForm () {
       this.dialogVisible = false;
     },
-    getKitchenSelect () {
-      PublicModule.getKitchenSelect().then(res => {
-        if (res.data) {
-          let list = [];
-          res.data.list.forEach((el, i) => {
-            list.push({
-
-              id: el.id,
-              name: el.kitchenName,
-
-            });
-          });
-          this.kitchenData = list;
-        }
-      });
-    },
-    getFormKitchenSelect () {
-      PublicModule.getKitchenSelect().then(res => {
-        if (res.data) {
-          let list = [];
-          res.data.list.forEach((el, i) => {
-            list.push({
-
-              id: el.id,
-              name: el.kitchenName,
-
-            });
-          });
-          this.form.kitchenData = list;
-        }
-      });
-    },
     // 删除用户
     deleteKitchenUser (row) {
-      this.$confirm(`是否删除用户名为"${row.userName}"的用户?`, '提示', {
+      this.$confirm(`是否删除后厨用户?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -464,7 +392,6 @@ export default {
     },
   },
   mounted () {
-    this.getKitchenSelect();
     this.getKitchenUserList();
   }
 }
