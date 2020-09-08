@@ -33,7 +33,7 @@
           <el-table-column fixed="right" align="center" label="操作" width="220">
             <template slot-scope="scope">
               <el-button @click="goToDetail(scope.row.id)" type="text" size="small">编辑</el-button>
-              <el-button @click="goToSchool(scope.row.id)" type="text" size="small">分配学校</el-button>
+              <el-button @click="goToSchool(scope.row.id)" type="text" size="small">分配</el-button>
               <el-button style="display:none" @click="deleteUser(scope.row)" type="text" size="small">删除</el-button>
             </template>
           </el-table-column>
@@ -79,7 +79,7 @@
         </el-dialog>
       </div>
       <div class="choseSchoolBox">
-        <el-dialog title="分配学校" :visible.sync="choseSchoolVisible" @close="closeChoseSchool" :show-close="true" width="750px">
+        <el-dialog title="分配" :visible.sync="choseSchoolVisible" @close="closeChoseSchool" :show-close="true" width="750px">
           <div class="wrapper">
             <el-row>
               <div class="tableCom" style="margin-top: 15px;">

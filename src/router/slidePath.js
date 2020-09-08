@@ -71,28 +71,28 @@ export default [
         component: () => import('@/page/foodManagement/foodList'),
       },
       {
-        path: 'kitchenUserList',
-        name: 'kitchenUserList',
+        path: 'menuList',
+        name: 'menuList',
         role: ["user", "all"],
         sliderShow: true,
         meta: {
-          title: '后厨列表',
-          icon: 'el-icon-food', //el-icon-truck
+          title: '菜单列表',
+          icon: 'el-icon-s-custom', //el-icon-truck
         },
-        component: () => import('@/page/foodManagement/kitchenUserList'),
-      }]
-  },
-  {
-    path: '/foodManagement',
-    name: 'marketManagement',
-    role: ["user", "all"],
-    sliderShow: true,
-    meta: {
-      title: '经营管理',
-      icon: 'el-icon-shopping-cart-full'
-    },
-    component: contentMain,
-    children: [
+        component: () => import('@/page/foodManagement/menuList'),
+      },
+      {
+        path: 'assignList',
+        name: 'assignList',
+        role: ["order", "all"],
+        sliderShow: true,
+        meta: {
+          title: '配餐管理',
+          icon: 'el-icon-fork-spoon', //el-icon-truck
+        },
+        noDropdown: true,
+        component: () => import('@/page/orderManagement/assignList'),
+      },
       {
         path: 'orderList',
         name: 'orderList',
@@ -103,7 +103,7 @@ export default [
           icon: 'el-icon-food', //el-icon-truck
         },
         component: () => import('@/page/orderManagement/orderList'),
-      }]
+      },]
   },
   {
     path: '/financeManagement',
@@ -117,15 +117,26 @@ export default [
     component: contentMain,
     children: [
       {
-        path: 'transactionList',
-        name: 'transactionList',
+        path: 'rechargeList',
+        name: 'rechargeList',
         role: ["user", "all"],
         sliderShow: true,
         meta: {
-          title: '交易记录',
+          title: '充值记录',
           icon: 'el-icon-food', //el-icon-truck
         },
-        component: () => import('@/page/financeManagement/transactionList'),
+        component: () => import('@/page/financeManagement/rechargeList'),
+      },
+      {
+        path: 'consumeList',
+        name: 'consumeList',
+        role: ["user", "all"],
+        sliderShow: true,
+        meta: {
+          title: '消费记录',
+          icon: 'el-icon-food', //el-icon-truck
+        },
+        component: () => import('@/page/financeManagement/consumeList'),
       },
       {
         path: 'statementList',
@@ -161,6 +172,18 @@ export default [
         },
         noDropdown: true,
         component: () => import('@/page/systemManagement/adminList'),
+      },
+      {
+        path: 'schoolList',
+        name: 'schoolList',
+        role: ["all"],
+        sliderShow: true,
+        meta: {
+          title: '系统设置',
+          icon: 'el-icon-user-solid'
+        },
+        noDropdown: true,
+        component: () => import('@/page/schoolManagement/schoolList'),
       },
       {
         path: 'userinfo',

@@ -11,6 +11,20 @@ let FinanceModule = {
       data: datas
     });
   },
+  getWalletLogList: function (datas) {
+    return HttpRequest.getRequest({
+      method: "POST",
+      url: `${apiUrl}/walletLog/list`,
+      data: datas
+    });
+  },
+  addRechargeInfo: function (datas) {
+    return HttpRequest.getRequest({
+      method: "POST",
+      url: `${apiUrl}/walletLog/add`,
+      data: datas
+    });
+  },
   getWithdrawList: function (datas) {
     return HttpRequest.getRequest({
       method: "POST",

@@ -7,25 +7,11 @@
             <el-col :span="18">
               <el-form-item prop="dateVals">
                 <el-date-picker v-model="formInline.dateVals" @change="changeDate" value-format="yyyy-MM-dd" type="daterange" size="small"
-                  range-separator="至" start-placeholder="交易开始日期" end-placeholder="交易结束日期" align="right">
+                  range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="right">
                 </el-date-picker>
               </el-form-item>
-              <el-form-item style="width:150px;" prop="schoolId">
-                <el-select clearable v-model.trim="formInline.schoolId" placeholder="请选择学校" size="small">
-                  <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in schoolData" :key="`${_uid}_${index}`"
-                    :label="item.name" :value="item.id">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item prop="transactionType" style="width:150px;">
-                <el-select clearable v-model.trim="formInline.transactionType" placeholder="请选择类型" size="small">
-                  <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in transactionTypeArr" :key="`${_uid}_${index}`"
-                    :label="item" :value="index">
-                  </el-option>
-                </el-select>
-              </el-form-item>
               <el-form-item prop="userName" style="width:150px;">
-                <el-input size="small" clearable v-model.trim="formInline.dinerName" placeholder="请输入人员名称">
+                <el-input size="small" clearable v-model.trim="formInline.dinerName" placeholder="请输入人员姓名">
                 </el-input>
               </el-form-item>
             </el-col>
@@ -37,63 +23,15 @@
           </el-row>
         </el-form>
       </div>
-      <div class="dataTotal">
-        <el-row>
-          <el-col :span="6">
-            <div>
-              <div class="left">充值金额合计
-                <el-tooltip class="item" effect="dark" content="筛选结果的充值金额合计" placement="top-start">
-                  <i class="el-icon-question"></i>
-                </el-tooltip>
-              </div>
-              <div class="num">{{incomeAmount}}</div>
-            </div>
-          </el-col>
-          <el-col :span="6">
-            <div>
-              <div class="left">充值笔数合计
-                <el-tooltip class="item" effect="dark" content="筛选结果的充值笔数合计" placement="top-start">
-                  <i class="el-icon-question"></i>
-                </el-tooltip>
-              </div>
-              <div class="num">{{incomeCount}}</div>
-            </div>
-          </el-col>
-          <el-col :span="6">
-            <div>
-              <div class="left">提现金额合计
-                <el-tooltip class="item" effect="dark" content="筛选结果的全部提现金额合计" placement="top-start">
-                  <i class="el-icon-question"></i>
-                </el-tooltip>
-              </div>
-              <div class="num">{{refundAmount}}</div>
-            </div>
-          </el-col>
-          <el-col :span="6">
-            <div>
-              <div class="left">提现笔数合计
-                <el-tooltip class="item" effect="dark" content="筛选结果的全部提现笔数合计" placement="top-start">
-                  <i class="el-icon-question"></i>
-                </el-tooltip>
-              </div>
-              <div class="num">{{refundCount}}</div>
-            </div>
-          </el-col>
-        </el-row>
-      </div>
       <div class="tableCom" style="margin-top: 15px;">
         <el-table :data="listData" border style="width: 100%">
           <el-table-column prop="rowId" label='序号' width="50">
           </el-table-column>
-          <el-table-column prop="outTradeNo" width="200" label='交易流水号'>
+          <el-table-column prop="createTime" width="200" label='消费时间'>
           </el-table-column>
-          <el-table-column prop="dinerName" width="200" label='人员'>
+          <el-table-column prop="dinerName" width="200" label='人员姓名'>
           </el-table-column>
-          <el-table-column prop="transactionType" width="60" label='类型'>
-          </el-table-column>
-          <el-table-column prop="money" width="200" label='金额'>
-          </el-table-column>
-          <el-table-column prop="transactionTime" label='交易时间'>
+          <el-table-column prop="money" label='金额'>
           </el-table-column>
         </el-table>
       </div>
@@ -133,16 +71,15 @@ export default {
     }
   },
   methods: {
-    getTransactionList (pageIndex = 1, pageSize = 15) {
+    getWalletLogList (pageIndex = 1, pageSize = 15) {
       let datas = {
         dateRange: this.formInline.dateVals == null ? [] : this.formInline.dateVals,
-        schoolId: Number(this.formInline.schoolId),
-        transactionType: this.formInline.transactionType,
+        action: "CONSUME",
         dinerName: this.formInline.dinerName,
         pageIndex: pageIndex,
         pageSize: pageSize
       };
-      FinanceModule.getTransactionList(datas).then(res => {
+      FinanceModule.getWalletLogList(datas).then(res => {
         let list = [];
         let total = 0;
         let incomeAmount = '0.00';
@@ -160,7 +97,7 @@ export default {
               dinerName: el.dinerName,
               transactionType: this.transactionTypeArr[el.transactionType],
               money: el.money,
-              transactionTime: el.transactionTime,
+              createTime: el.createTime,
 
             });
             rowId++;
@@ -180,34 +117,18 @@ export default {
         this.refundCount = refundCount;
       });
     },
-    getSchoolSelect () {
-      PublicModule.getSchoolSelect().then(res => {
-        if (res.data) {
-          let list = [];
-          res.data.list.forEach((el, i) => {
-            list.push({
-
-              id: el.id,
-              name: el.schoolName,
-
-            });
-          });
-          this.schoolData = list;
-        }
-      });
-    },
     // 查询
     submitForm () {
-      this.getTransactionList();
+      this.getWalletLogList();
     },
     // 分页
     handleSizeChange (val) {
       this.pageSize = val;
-      this.getTransactionList(this.pageIndex, val);
+      this.getWalletLogList(this.pageIndex, val);
     },
     handleCurrentChange (val) {
       this.pageIndex = val;
-      this.getTransactionList(val, this.pageSize);
+      this.getWalletLogList(val, this.pageSize);
     },
     changeDate () {
       if (!this.formInline.dateVals) {
@@ -217,8 +138,7 @@ export default {
     },
   },
   mounted () {
-    this.getSchoolSelect();
-    this.getTransactionList();
+    this.getWalletLogList();
   }
 }
 </script>

@@ -5,21 +5,19 @@
         <el-form :inline="true" :model="formInline" class="form-inline">
           <el-row>
             <el-col :span="18">
-              <el-form-item style="width:150px;" prop="kitchenId">
-                <el-select clearable v-model.trim="formInline.kitchenId" placeholder="请选择供应商" size="small">
-                  <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in kitchenData" :key="`${_uid}_${index}`"
-                    :label="item.name" :value="item.id">
-                  </el-option>
-                </el-select>
-              </el-form-item>
               <el-form-item prop="menuName" style="width:150px;">
-                <el-input size="small" clearable v-model.trim="formInline.menuName" placeholder="请输入菜单名称">
-                </el-input>
+                <el-input
+                  size="small"
+                  clearable
+                  v-model.trim="formInline.menuName"
+                  placeholder="请输入菜单名称"
+                ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item style="float: right;">
                 <el-button size="small" type="primary" @click="submitForm('formInline')">查询</el-button>
+                <el-button size="small" icon="el-icon-plus" type="default" @click="addUser">添加菜单</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -27,24 +25,20 @@
       </div>
       <div class="tableCom" style="margin-top: 15px;">
         <el-table :data="listData" border style="width: 100%">
-          <el-table-column prop="rowId" label='序号' width="50">
-          </el-table-column>
-          <el-table-column prop="kitchenName" label='供应商'>
-          </el-table-column>
-          <el-table-column prop="menuName" label='菜单名称'>
-          </el-table-column>
-          <el-table-column prop="menuCat" width="80" label='类型'>
-          </el-table-column>
-          <el-table-column prop="menuType" width="80" label='餐段'>
-          </el-table-column>
-          <el-table-column prop="rangeName" width="220" label='时段'>
-          </el-table-column>
-          <el-table-column prop="schoolName" label='使用学校'>
-          </el-table-column>
-          <el-table-column prop="createTime" label='创建时间'>
-          </el-table-column>
+          <el-table-column prop="rowId" label="序号" width="50"></el-table-column>
+          <el-table-column prop="menuName" label="菜单名称"></el-table-column>
+          <el-table-column prop="menuCat" width="80" label="类型"></el-table-column>
+          <el-table-column prop="menuType" width="80" label="餐段"></el-table-column>
+          <el-table-column prop="rangeName" width="220" label="时段"></el-table-column>
+          <el-table-column prop="createTime" label="创建时间"></el-table-column>
 
-          <el-table-column fixed="right" style="display:none;" align="center" label="操作" width="200">
+          <el-table-column
+            fixed="right"
+            style="display:none;"
+            align="center"
+            label="操作"
+            width="200"
+          >
             <template slot-scope="scope">
               <el-button @click="goToDetail(scope.row.id)" type="text" size="small">查看</el-button>
             </template>
@@ -52,12 +46,23 @@
         </el-table>
       </div>
       <div class="pagination" style="margin-top: 15px;">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[15, 30, 45, 60]" :page-size="100"
-          layout="total, sizes, prev, pager, next, jumper" :total=pageTotal>
-        </el-pagination>
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :page-sizes="[15, 30, 45, 60]"
+          :page-size="100"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="pageTotal"
+        ></el-pagination>
       </div>
       <div class="dialogBox">
-        <el-dialog :title="formTitle" :visible.sync="dialogVisible" @close="cancelForm" :show-close="true" width="750px">
+        <el-dialog
+          :title="formTitle"
+          :visible.sync="dialogVisible"
+          @close="cancelForm"
+          :show-close="true"
+          width="750px"
+        >
           <div class="wrapper">
             <div>
               <el-form :model="form" :rules="rules" label-width="100px" ref="ruleForm">
@@ -67,22 +72,31 @@
                       <span>{{form.menuName}}</span>
                     </el-form-item>
                     <el-form-item label="菜单名称：" v-else prop="menuName">
-                      <el-input size="small" clearable v-model.trim="form.menuName" placeholder="请输入菜单名称" style="width:180px;"></el-input>
+                      <el-input
+                        size="small"
+                        clearable
+                        v-model.trim="form.menuName"
+                        placeholder="请输入菜单名称"
+                        style="width:180px;"
+                      ></el-input>
                     </el-form-item>
                     <el-form-item label="类型：" v-if="isAdd == false" prop="menuCat">
                       <span>{{form.menuCatName}}</span>
                     </el-form-item>
                     <el-form-item label="类型：" v-else prop="menuCat">
                       <el-radio v-model="form.menuCat" @change="changeMenuCat" label="1">周度菜单</el-radio>
-                      <el-radio v-model="form.menuCat" @change="changeMenuCat" label="2">月度菜单</el-radio>
                     </el-form-item>
                     <el-form-item label="时段：" v-if="isAdd == false" prop="rangeId">
                       <span>{{form.rangeName}}</span>
                     </el-form-item>
                     <el-form-item label="时段：" v-else prop="rangeId">
                       <el-select style="width:300px;" v-model="form.rangeId" placeholder="请选择日期时段">
-                        <el-option v-for="item in rangeData" :key="item.id" :label="item.name" :value="item.id">
-                        </el-option>
+                        <el-option
+                          v-for="item in rangeData"
+                          :key="item.id"
+                          :label="item.name"
+                          :value="item.id"
+                        ></el-option>
                       </el-select>
                     </el-form-item>
                     <el-form-item label="餐段：" v-if="isAdd == false" prop="menuType">
@@ -112,9 +126,20 @@
                     <el-table-column align="center">
                       <template slot-scope="scope">
                         <div class="food-list">
-                          <div class="food-item" v-for="(item, index) in scope.row.content" v-bind:key="index">
+                          <div
+                            class="food-item"
+                            v-for="(item, index) in scope.row.content"
+                            v-bind:key="index"
+                          >
                             <div class="food-name">{{item.foodName}}</div>
                             <div class="food-price">{{item.price}}</div>
+                          </div>
+                          <div class="food-item">
+                            <el-button
+                              @click="choseFood(scope.row.rowId)"
+                              type="text"
+                              size="small"
+                            >编辑</el-button>
                           </div>
                         </div>
                       </template>
@@ -122,9 +147,45 @@
                   </el-table>
                 </div>
               </el-row>
-
             </div>
           </div>
+          <span slot="footer" class="dialog-footer" v-if="isAdd == true">
+            <el-button @click="cancelForm()" size="mini">取消</el-button>
+            <el-button type="primary" @click="submitAddForm('ruleForm')" size="mini">保存</el-button>
+          </span>
+        </el-dialog>
+      </div>
+      <div class="choseFoodBox">
+        <el-dialog
+          :title="formTitle"
+          :visible.sync="choseFoodVisible"
+          @close="closeChoseFood"
+          :show-close="true"
+          width="750px"
+        >
+          <div class="wrapper">
+            <el-row>
+              <div class="tableCom" style="margin-top: 15px;">
+                <div class="food-list">
+                  <el-checkbox-group v-model="foodSelect" @change="changeChoseFood">
+                    <el-checkbox-button
+                      class="chose-item"
+                      v-for="(item, index) in foodData"
+                      :label="item.id"
+                      :key="index"
+                    >
+                      <div>{{item.foodName}}</div>
+                      <div>{{item.price}}</div>
+                    </el-checkbox-button>
+                  </el-checkbox-group>
+                </div>
+              </div>
+            </el-row>
+          </div>
+          <span slot="footer" class="dialog-footer">
+            <el-button @click="closeChoseFood()" size="mini">取消</el-button>
+            <el-button type="primary" @click="submitFoodForm()" size="mini">保存</el-button>
+          </span>
         </el-dialog>
       </div>
     </div>
@@ -133,15 +194,15 @@
 <script>
 import { PublicModule, OrderModule } from "@/api/common";
 export default {
-  name: 'userList',
-  data () {
+  name: "userList",
+  data() {
     const validateRepeatPassword = (rule, value, callback) => {
       if (this.form.repeatPassword != this.form.newPassword) {
-        callback(new Error('两次密码不一致'));
+        callback(new Error("两次密码不一致"));
       }
 
       callback();
-    }
+    };
     return {
       isAdd: false,
       formTitle: "",
@@ -150,35 +211,35 @@ export default {
       choseSchoolVisible: false,
       form: {
         id: 0,
-        menuName: '',
-        menuCat: '',
-        menuCatName: '',
-        rangeId: '',
-        rangeName: '',
+        menuName: "",
+        menuCat: 1,
+        menuCatName: "",
+        rangeId: "",
+        rangeName: "",
         menuType: "",
         menuTypeName: "",
-        content: []
+        content: [],
       },
       formInline: {
-        menuName: '',
+        menuName: "",
       },
       menuCatArr: {
-        "1": "周度菜单",
-        "2": "月度菜单",
+        1: "周度菜单",
+        2: "月度菜单",
       },
       menuTypeArr: {
-        "1": "早餐",
-        "2": "午餐",
-        "3": "晚餐",
+        1: "早餐",
+        2: "午餐",
+        3: "晚餐",
       },
       weekDayArr: {
-        "1": "星期日",
-        "2": "星期一",
-        "3": "星期二",
-        "4": "星期三",
-        "5": "星期四",
-        "6": "星期五",
-        "7": "星期六",
+        1: "星期日",
+        2: "星期一",
+        3: "星期二",
+        4: "星期三",
+        5: "星期四",
+        6: "星期五",
+        7: "星期六",
       },
       kitchenData: [],
       rangeData: [],
@@ -193,34 +254,68 @@ export default {
       school: {
         menuId: 0,
         list: [],
-        select: []
+        select: [],
       },
       rules: {
         menuName: [
-          { required: true, message: '请输入菜单名称', trigger: ['blur', 'change'] },
-          { required: true, min: 2, max: 128, message: '菜单名称不能小于2或大于128个字符', trigger: ['blur', 'change'] }
+          {
+            required: true,
+            message: "请输入菜单名称",
+            trigger: ["blur", "change"],
+          },
+          {
+            required: true,
+            min: 2,
+            max: 128,
+            message: "菜单名称不能小于2或大于128个字符",
+            trigger: ["blur", "change"],
+          },
         ],
         price: [
-          { required: true, message: '请选择菜品价格', trigger: ['blur', 'change'] },
+          {
+            required: true,
+            message: "请选择菜品价格",
+            trigger: ["blur", "change"],
+          },
         ],
-      }
-    }
+        menuCat: [
+          {
+            required: true,
+            message: "请选择类型",
+            trigger: ["blur", "change"],
+          },
+        ],
+        rangeId: [
+          {
+            required: true,
+            message: "请选择时段",
+            trigger: ["blur", "change"],
+          },
+        ],
+        menuType: [
+          {
+            required: true,
+            message: "请选择餐段",
+            trigger: ["blur", "change"],
+          },
+        ],
+      },
+    };
   },
   methods: {
-    getAdminList (pageIndex = 1, pageSize = 15) {
+    getAdminList(pageIndex = 1, pageSize = 15) {
       let datas = {
         menuName: this.formInline.menuName,
         pageIndex: pageIndex,
-        pageSize: pageSize
+        pageSize: pageSize,
       };
-      OrderModule.getMenuList(datas).then(res => {
+      OrderModule.getMenuList(datas).then((res) => {
         let list = [];
         let total = 0;
         let rowId = (pageIndex - 1) * pageSize + 1;
         if (res.data) {
           res.data.list.forEach((el, i) => {
             list.push({
-
               rowId: rowId,
               id: el.id,
               kitchenName: el.kitchenName,
@@ -230,7 +325,6 @@ export default {
               menuType: this.menuTypeArr[el.menuType],
               schoolName: el.schoolName,
               createTime: el.createTime,
-
             });
             rowId++;
           });
@@ -241,13 +335,12 @@ export default {
         this.pageTotal = total;
       });
     },
-    getAdminInfo (id) {
-      OrderModule.getMenuInfo(id).then(res => {
+    getAdminInfo(id) {
+      OrderModule.getMenuInfo(id).then((res) => {
         if (res.data) {
           let data = res.data.info;
 
           let info = {
-
             id: data.id,
             menuName: data.menuName,
             menuCat: data.menuCat,
@@ -256,15 +349,14 @@ export default {
             menuType: data.menuType,
             menuTypeName: this.menuTypeArr[data.menuType],
             createTime: data.createTime,
-
           };
 
           this.form = info;
         }
       });
     },
-    getMenuFoodInfo (id) {
-      OrderModule.getMenuFoodInfo(id).then(res => {
+    getMenuFoodInfo(id) {
+      OrderModule.getMenuFoodInfo(id).then((res) => {
         let list = [];
         if (res.data) {
           let data = res.data.list;
@@ -284,12 +376,11 @@ export default {
         }
       });
     },
-    getMenuSchoolInfo (id) {
-      OrderModule.getMenuSchoolInfo(id).then(res => {
+    getMenuSchoolInfo(id) {
+      OrderModule.getMenuSchoolInfo(id).then((res) => {
         let list = [];
         let select = [];
         if (res.data) {
-
           res.data.list.forEach((el, i) => {
             list.push({
               rowId: i,
@@ -308,10 +399,9 @@ export default {
         }
       });
     },
-    getFoodSelect () {
-      let data = {
-      };
-      PublicModule.getFoodSelect(data).then(res => {
+    getFoodSelect() {
+      let data = {};
+      PublicModule.getFoodSelect(data).then((res) => {
         let list = [];
         if (res.data) {
           let data = res.data.list;
@@ -329,87 +419,219 @@ export default {
         }
       });
     },
-    getRangeWeekList () {
-      let datas = {
+    addUser() {
+      this.formTitle = "新增菜单";
+      this.isAdd = true;
+      this.dialogVisible = true;
+      this.clearForm();
+      console.log(this.form);
+    },
+    cancelForm() {
+      this.dialogVisible = false;
+    },
+    closeChoseFood() {
+      this.choseFoodVisible = false;
+    },
+    changeChoseFood(e) {
+      console.log(e);
+      console.log(this.foodSelect);
+    },
+    submitAddForm(formName) {
+      let that = this;
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          if (this.isAdd) {
+            this.addAdminInfo();
+          } else {
+            this.updateAdminInfo();
+          }
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    addAdminInfo() {
+      let data = {
+        menuName: this.form.menuName,
+        menuCat: this.form.menuCat,
+        rangeId: this.form.rangeId,
+        menuType: this.form.menuType,
       };
-      OrderModule.getRangeWeekList(datas).then(res => {
+      OrderModule.addMenuInfo(data).then((res) => {
+        if (res.data) {
+          if (res.data.err == 0) {
+            this.$message({
+              type: "success",
+              message: "保存成功!",
+            });
+            this.dialogVisible = false;
+            this.getAdminList();
+          } else {
+            this.$message({
+              type: "error",
+              message: "保存失败!",
+            });
+          }
+        }
+      });
+    },
+    updateAdminInfo() {
+      let data = {
+        id: this.form.id,
+        foodName: this.form.foodName,
+        foodDesc: this.form.foodDesc,
+        price: this.form.price,
+      };
+      OrderModule.updateFoodInfo(data).then((res) => {
+        if (res.data) {
+          if (res.data.err == 0) {
+            this.$message({
+              type: "success",
+              message: "保存成功!",
+            });
+            this.choseFoodVisible = false;
+            this.getAdminList();
+          } else if (res.data.err == 1) {
+            this.$message({
+              type: "error",
+              message: "无效的菜单名称!",
+            });
+          } else if (res.data.err == 2) {
+            this.$message({
+              type: "error",
+              message: "无效的时间段!",
+            });
+          } else if (res.data.err == 4) {
+            this.$message({
+              type: "error",
+              message: "已存在该时间段菜单!",
+            });
+          } else {
+            this.$message({
+              type: "error",
+              message: "保存失败!",
+            });
+          }
+        }
+      });
+    },
+    updateMenuFoodInfo() {
+      let data = {
+        id: this.foodId,
+        menuId: this.form.id,
+        contentId: this.foodSelect,
+      };
+      OrderModule.updateMenuFoodInfo(data).then((res) => {
+        if (res.data) {
+          if (res.data.err == 0) {
+            this.$message({
+              type: "success",
+              message: "保存成功!",
+            });
+            this.choseFoodVisible = false;
+            this.getMenuFoodInfo(this.form.id);
+          } else if (res.data.err == 1) {
+            this.$message({
+              type: "error",
+              message: "无效的菜单!",
+            });
+          } else if (res.data.err == 2) {
+            this.$message({
+              type: "error",
+              message: "超出数量限制，每天最多只能加入9个菜品!",
+            });
+          } else {
+            this.$message({
+              type: "error",
+              message: "保存失败!",
+            });
+          }
+        }
+      });
+    },
+    submitFoodForm() {
+      this.updateMenuFoodInfo();
+    },
+    choseFood(id) {
+      this.choseFoodVisible = true;
+      let food = this.menuFoodData[id];
+      let foodSelect = [];
+      food.content.forEach((el, i) => {
+        foodSelect.push(el.id);
+      });
+      this.foodId = food.id;
+      this.foodSelect = foodSelect;
+      this.getFoodSelect();
+    },
+    getRangeWeekList() {
+      let datas = {};
+      OrderModule.getRangeWeekList(datas).then((res) => {
         if (res.data) {
           let list = [];
           res.data.list.forEach((el, i) => {
             list.push({
-
               id: el.id,
               name: el.rangeName,
-
             });
           });
           this.rangeData = list;
         }
       });
     },
-    getRangeMonthList () {
-      let datas = {
-      };
-      OrderModule.getRangeMonthList(datas).then(res => {
+    getRangeMonthList() {
+      let datas = {};
+      OrderModule.getRangeMonthList(datas).then((res) => {
         if (res.data) {
           let list = [];
           res.data.list.forEach((el, i) => {
             list.push({
-
               id: el.id,
               name: el.rangeName,
-
             });
           });
           this.rangeData = list;
         }
       });
     },
-    getKitchenSelect () {
-      PublicModule.getKitchenSelect().then(res => {
+    getKitchenSelect() {
+      PublicModule.getKitchenSelect().then((res) => {
         if (res.data) {
           let list = [];
           res.data.list.forEach((el, i) => {
             list.push({
-
               id: el.id,
               name: el.kitchenName,
-
             });
           });
           this.kitchenData = list;
         }
       });
     },
-    changeMenuCat (e) {
+    changeMenuCat(e) {
       if (e == 1) {
         this.getRangeWeekList();
       } else if (e == 2) {
         this.getRangeMonthList();
       }
     },
-    // 重置
-    resetForm () {
-      this.formInline.userName = '';
-    },
-    clearForm () {
-
-      if (this.$refs['ruleForm']) {
-        this.$refs['ruleForm'].resetFields();
+    clearForm() {
+      if (this.$refs["ruleForm"]) {
+        this.$refs["ruleForm"].resetFields();
       }
 
       this.form = {
         id: 0,
-        foodName: '',
-        foodDesc: '',
-        price: ''
+        foodName: "",
+        foodDesc: "",
+        price: "",
       };
     },
     // 查询
-    submitForm () {
+    submitForm() {
       this.getAdminList();
     },
-    goToDetail (id) {
+    goToDetail(id) {
       this.formTitle = "编辑菜单";
       this.isAdd = false;
       this.dialogVisible = true;
@@ -418,20 +640,20 @@ export default {
       this.getMenuFoodInfo(id);
     },
     // 分页
-    handleSizeChange (val) {
+    handleSizeChange(val) {
       this.pageSize = val;
       this.getAdminList(this.pageIndex, val);
     },
-    handleCurrentChange (val) {
+    handleCurrentChange(val) {
       this.pageIndex = val;
       this.getAdminList(val, this.pageSize);
     },
   },
-  mounted () {
+  mounted() {
     this.getKitchenSelect();
     this.getAdminList();
-  }
-}
+  },
+};
 </script>
 <style lang="">
 .queryList {

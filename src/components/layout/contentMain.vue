@@ -11,7 +11,7 @@
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {},
-  data () {
+  data() {
     //这里存放数据
     return {
       theme: "contentMain light",
@@ -22,24 +22,21 @@ export default {
   //监控data中的数据变化
   watch: {},
   //生命周期 - 创建完成（可以访问当前this实例）
-  created () {
-
-  },
+  created() {},
   //生命周期 - 挂载完成（可以访问DOM元素）
-  mounted () {
-  },
+  mounted() {},
   //方法集合
   methods: {
-    setTheme (theme) {
+    setTheme(theme) {
       console.log(theme);
-      if (theme == 'dark') {
+      if (theme == "dark") {
         this.theme = "contentMain dark";
       } else {
         this.theme = "contentMain light";
       }
-    }
+    },
   },
-}
+};
 </script>
 <style lang='scss' scoped>
 //@import url(); 引入公共css类
@@ -48,7 +45,7 @@ export default {
 //overflow: auto;
 // }
 .contentMain {
-  padding-bottom: 60px;
+  padding-bottom: 20px;
   height: auto;
 }
 

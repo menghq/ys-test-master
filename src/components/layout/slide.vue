@@ -53,7 +53,7 @@ export default {
   data () {
     //这里存放数据
     return {
-      defaultOpeneds: [],
+      defaultOpeneds: ['schoolManagement', 'kitchenManagement', 'financeManagement', 'systemManagement'],
       Routers: slide,
       roleAction: this.getRoleAction(),
       // isCollapse:false

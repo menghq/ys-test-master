@@ -4,14 +4,10 @@
       :linesWidth="1" :lineLinked="true" :lineOpacity="0.4" :linesDistance="150" :moveSpeed="3" :hoverEffect="true" hoverMode="grab"
       :clickEffect="true" clickMode="push">
     </vue-particles>
-    <div class="ms-logo">
-      <div>
-        <img src="@/assets/logo.png" width="300" :alt="pageTitle">
-      </div>
-    </div>
     <div class="ms-login">
       <div>
-        <div class="ms-title">霍州煤电集团吕临能化有限公司食堂管理系统</div>
+        <div class="ms-title">
+          <div>霍州煤电集团吕临能化有限公司</div><div>智慧食堂超级管理系统</div></div>
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="ms-content">
           <el-form-item prop="username">
             <el-input v-model="ruleForm.username" placeholder="用户名" maxlength="16">
@@ -159,7 +155,7 @@ export default {
 }
 .ms-login {
   position: absolute;
-  left: 70%;
+  left: 50%;
   top: 50%;
   width: 350px;
   margin: -190px 0 0 -175px;

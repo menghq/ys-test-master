@@ -6,7 +6,7 @@
           <el-row>
             <el-col :span="18">
               <el-form-item style="width:150px;" prop="schoolId">
-                <el-select clearable v-model.trim="formInline.schoolId" placeholder="请选择学校" @change="getGradeSelect" size="small">
+                <el-select clearable v-model.trim="formInline.schoolId" placeholder="请选择" @change="getGradeSelect" size="small">
                   <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in schoolData" :key="`${_uid}_${index}`"
                     :label="item.name" :value="item.id">
                   </el-option>
@@ -15,13 +15,6 @@
               <el-form-item style="width:150px;" prop="gradeId">
                 <el-select clearable v-model.trim="formInline.gradeId" placeholder="请选择年级" @change="getClassSelect" size="small">
                   <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in gradeData" :key="`${_uid}_${index}`"
-                    :label="item.name" :value="item.id">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item style="width:150px;" prop="classId">
-                <el-select clearable v-model.trim="formInline.classId" placeholder="请选择班级" size="small">
-                  <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in classData" :key="`${_uid}_${index}`"
                     :label="item.name" :value="item.id">
                   </el-option>
                 </el-select>
@@ -50,11 +43,7 @@
         <el-table :data="listData" border style="width: 100%">
           <el-table-column prop="rowId" label='序号' width="50">
           </el-table-column>
-          <el-table-column prop="schoolName" label='学校'>
-          </el-table-column>
-          <el-table-column prop="gradeName" label='年级'>
-          </el-table-column>
-          <el-table-column prop="className" label='班级'>
+          <el-table-column prop="gradeName" label='部门'>
           </el-table-column>
           <el-table-column prop="dinerName" label='人员'>
           </el-table-column>
@@ -85,26 +74,10 @@
             <el-form :model="form" :rules="rules" label-width="120px" ref="ruleForm">
               <el-row>
                 <el-col :span="24">
-                  <el-form-item label="学校：" prop="schoolId">
-                    <el-select v-model.trim="form.schoolId" placeholder="请选择学校" @change="getFormGradeSelect" style="width:150px;"
-                      size="small">
-                      <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in form.schoolData"
-                        :key="`${_uid}_${index}`" :label="item.name" :value="item.id">
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
                   <el-form-item label="年级：" prop="gradeId">
-                    <el-select v-model.trim="form.gradeId" placeholder="请选择年级" style="width:150px;" @change="getFormClassSelect"
+                    <el-select v-model.trim="form.gradeId" placeholder="请选择部门" style="width:150px;" @change="getFormClassSelect"
                       size="small">
                       <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in form.gradeData" :key="`${_uid}_${index}`"
-                        :label="item.name" :value="item.id">
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item label="班级：" prop="classId">
-                    <el-select v-model.trim="form.classId" placeholder="请选择班级" style="width:150px;" size="small"
-                      @change="getFormDinerSelect">
-                      <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in form.classData" :key="`${_uid}_${index}`"
                         :label="item.name" :value="item.id">
                       </el-option>
                     </el-select>
@@ -145,9 +118,6 @@
             <el-form :model="form" :rules="rules" label-width="120px" ref="ruleForm">
               <el-row>
                 <el-col :span="24">
-                  <el-form-item label="学校名称：" prop="schoolName">
-                    <el-input size="small" clearable v-model.trim="form.schoolName" placeholder="请输入学校名称" style="width:180px;"></el-input>
-                  </el-form-item>
                   <el-form-item label="Excel文件：" prop="file">
                     <el-upload class="upload-demo" drag action="" :auto-upload="false" :show-file-list="false"
                       :on-change="handleImportPreview">
@@ -443,11 +413,6 @@ export default {
             });
             this.dialogVisible = false;
             this.getStopMealList();
-          } else if (res.data.err == 1) {
-            this.$message({
-              type: 'error',
-              message: '请选择班级!'
-            });
           } else if (res.data.err == 2) {
             this.$message({
               type: 'error',

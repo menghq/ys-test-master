@@ -7,46 +7,44 @@
         <bread></bread>
         <content-main></content-main>
         <!-- <router-view></router-view> -->
+        <my-footer></my-footer>
       </el-main>
     </el-container>
   </div>
-
 </template>
 
 <script>
 //这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
 //例如：import 《组件名称》 from '《组件路径》';
-import myHeader from '@/components/layout/header'
-import mySlide from '@/components/layout/slide'
-import contentMain from '@/components/layout/contentMain'
-import bread from '@/components/layout/bread'
-import slide from '@/router/slidePath.js'
+import myHeader from "@/components/layout/header";
+import myFooter from "@/components/layout/footer";
+import mySlide from "@/components/layout/slide";
+import contentMain from "@/components/layout/contentMain";
+import bread from "@/components/layout/bread";
+import slide from "@/router/slidePath.js";
 
-import Loading from '@/components/loading'
+import Loading from "@/components/loading";
 
 export default {
   //import引入的组件需要注入到对象中才能使用
   components: {
     myHeader,
+    myFooter,
     mySlide,
     contentMain,
     bread,
-    Loading
+    Loading,
   },
 
-  data () {
+  data() {
     return {
       header: [],
-    }
+    };
   },
-  computed: {
-
-  },
-  mounted () {
-  },
-  methods: {
-  }
-}
+  computed: {},
+  mounted() {},
+  methods: {},
+};
 </script>
 <style lang='scss' scoped>
 .home {

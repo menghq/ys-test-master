@@ -6,24 +6,16 @@
           <el-row>
             <el-col :span="24">
               <el-form-item prop="schoolId" style="width:150px;">
-                <el-select clearable @change="handleSchoolChange" v-model.trim="formInline.schoolId" placeholder="请选择校区" size="small">
+                <el-select clearable @change="handleSchoolChange" v-model.trim="formInline.schoolId" placeholder="请选择单位" size="small">
                   <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in schoolData" :key="`${_uid}_${index}`"
                     :label="item.name" :value="item.id">
                   </el-option>
                 </el-select>
               </el-form-item>
               <el-form-item prop="gradeClass" style="width:150px;">
-                <el-select clearable @change="handleGradeChange" filterable v-model.trim="formInline.gradeId" placeholder="请选择年级"
+                <el-select clearable @change="handleGradeChange" filterable v-model.trim="formInline.gradeId" placeholder="请选择部门"
                   size="small">
                   <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in gradeData" :key="`${_uid}_${index}`"
-                    :label="item.name" :value="item.id">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item prop="gradeClass" style="width:150px;">
-                <el-select clearable @change="handleClassChange" filterable v-model.trim="formInline.classId" placeholder="请选择班级"
-                  size="small">
-                  <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in classData" :key="`${_uid}_${index}`"
                     :label="item.name" :value="item.id">
                   </el-option>
                 </el-select>

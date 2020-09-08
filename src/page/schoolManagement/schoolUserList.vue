@@ -23,8 +23,6 @@
         <el-table :data="listData" border style="width: 100%">
           <el-table-column prop="rowId" label='序号' width="50">
           </el-table-column>
-          <el-table-column prop="schoolName" width="200" label='学校'>
-          </el-table-column>
           <el-table-column prop="userName" width="200" label='用户名'>
           </el-table-column>
           <el-table-column prop="roleId" width="200" label='权限'>
@@ -56,16 +54,6 @@
                 <el-row>
                   <el-col :span="12">
                     <div class="grid-content bg-purple">
-                      <el-form-item label="学校：" v-if="isAdd == true" prop="schoolId">
-                        <el-select v-model.trim="form.schoolId" placeholder="请选择学校" style="width:150px;" size="small">
-                          <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in form.schoolData"
-                            :key="`${_uid}_${index}`" :label="item.name" :value="item.id">
-                          </el-option>
-                        </el-select>
-                      </el-form-item>
-                      <el-form-item v-else label="学校：">
-                        {{form.schoolName}}
-                      </el-form-item>
                       <el-form-item label="用户名：" v-if="isAdd == true" prop="userName">
                         <el-input size="small" clearable v-model.trim="form.userName" placeholder="请输入用户名" style="width:180px;"></el-input>
                       </el-form-item>
@@ -173,7 +161,7 @@ export default {
       newPasswordProp: null,
       rules: {
         schoolId: [
-          { required: true, message: '请选择学校', trigger: 'change' },
+          { required: true, message: '请选择', trigger: 'change' },
         ],
         userName: [
           { required: true, message: '请输入用户名', trigger: ['blur', 'change'] },
@@ -361,7 +349,7 @@ export default {
     },
     // 添加用户
     addUser () {
-      this.formTitle = "新增学校用户";
+      this.formTitle = "新增用户";
       this.isAdd = true;
       this.dialogVisible = true;
       this.clearForm();
@@ -370,7 +358,7 @@ export default {
       console.log(this.form);
     },
     goToDetail (id) {
-      this.formTitle = "编辑学校用户";
+      this.formTitle = "编辑用户";
       this.isAdd = false;
       this.dialogVisible = true;
       this.clearForm();

@@ -47,7 +47,7 @@
           </div>
           <div class="tableCom" style="margin-top: 15px;" v-if="Object.keys(listGradeData).length > 0">
             <el-tabs v-model="detailSelect" type="card" @tab-click="handleTabClick">
-              <el-tab-pane label="年级总览" name="grade">
+              <el-tab-pane label="部门总览" name="grade">
                 <el-row v-for="(group, index) in listGradeData" :key="index">
                   <el-row>
                     {{group.name}} 合计：{{group.foodAmount}}份
@@ -62,29 +62,6 @@
                   </el-table>
                 </el-row>
               </el-tab-pane>
-              <el-tab-pane label="班级总览" name="class">
-                <el-row v-for="(group, index) in listClassData" :key="index">
-                  <el-row>
-                    {{group.name}} 合计：{{group.foodAmount}}份
-                  </el-row>
-                  <el-table :data="group.classList" highlight-current-row border style="width: 100%">
-                    <el-table-column prop="rowId" label='序号' width="50">
-                    </el-table-column>
-                    <el-table-column prop="className" label='班级'>
-                    </el-table-column>
-                    <el-table-column v-for="(food, i) in group.foodName" :key="i" :label='food'>
-                      <template slot-scope="scope">
-                        {{scope.row.foodList[i].foodAmount}}
-                      </template>
-                    </el-table-column>
-                    <el-table-column prop="foodAmount" label='合计'>
-                      <template slot-scope="scope">
-                        {{scope.row.foodAmount}}
-                      </template>
-                    </el-table-column>
-                  </el-table>
-                </el-row>
-              </el-tab-pane>
               <el-tab-pane label="订单明细" name="order">
 
                 <el-table :data="listOrderData" highlight-current-row border style="width: 100%">
@@ -94,11 +71,7 @@
                   </el-table-column>
                   <el-table-column prop="dinerName" label='姓名'>
                   </el-table-column>
-                  <el-table-column prop="schoolName" label='學校'>
-                  </el-table-column>
-                  <el-table-column prop="gradeName" label='年級'>
-                  </el-table-column>
-                  <el-table-column prop="className" label='班級'>
+                  <el-table-column prop="gradeName" label='部门'>
                   </el-table-column>
                 </el-table>
 

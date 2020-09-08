@@ -2,6 +2,7 @@
   <el-header>
     <div :class="isCollapse ? 'logo min-logo':'logo' "
       style="float:left;height: 59px;line-height:59px;overflow: hidden;font-size:24px;padding-left:20px;">
+      <img src="@/assets/logo.png" :alt="pageTitle">
       <span>{{pageTitle}}</span>
     </div>
 
@@ -30,7 +31,7 @@ export default {
     return {
       username: sessionStorage.getItem('userName'),
       roleName: sessionStorage.getItem('roleName'),
-      pageTitle: "霍州煤电集团吕临能化有限公司食堂管理系统",
+      pageTitle: "霍州煤电集团吕临能化有限公司智慧食堂超级管理系统",
       isCollapse: false,
       changeBarDirection: false
     };
@@ -89,10 +90,10 @@ export default {
   justify-content: center;
 }
 .logo {
-  width: 600px;
+  width: 700px;
   transition: width 0.5s linear;
   img {
-    height: 58px;
+    height: 38px;
     vertical-align: middle;
   }
   span {

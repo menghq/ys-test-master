@@ -5,13 +5,6 @@
         <el-form :inline="true" :model="formInline" class="form-inline">
           <el-row>
             <el-col :span="18">
-              <el-form-item style="width:150px;" prop="kitchenId">
-                <el-select clearable v-model.trim="formInline.kitchenId" placeholder="请选择供应商" size="small">
-                  <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in kitchenData" :key="`${_uid}_${index}`"
-                    :label="item.name" :value="item.id">
-                  </el-option>
-                </el-select>
-              </el-form-item>
               <el-form-item prop="foodName" style="width:150px;">
                 <el-input size="small" clearable v-model.trim="formInline.foodName" placeholder="请输入菜品名称">
                 </el-input>
@@ -29,8 +22,6 @@
       <div class="tableCom" style="margin-top: 15px;">
         <el-table :data="listData" border style="width: 100%">
           <el-table-column prop="rowId" label='序号' width="50">
-          </el-table-column>
-          <el-table-column prop="kitchenName" width="200" label='供应商'>
           </el-table-column>
           <el-table-column prop="foodName" width="200" label='菜品名称'>
           </el-table-column>
@@ -60,7 +51,7 @@
                 <el-row>
                   <el-col :span="24">
                     <div class="grid-content bg-purple">
-                      <el-form-item label="封面图片：" prop="foodImg">
+                      <el-form-item label="封面图片：" prop="foodImg" v-if="1==2">
                         <el-upload class="avatar-uploader" action="" :show-file-list="false" :auto-upload="false"
                           :on-change="changeFoodImgChange" :on-success="handleFoodImgSuccess" :before-upload="beforeFoodImgUpload">
                           <img v-if="form.foodThumb" :src="form.foodThumb" class="thumb">
@@ -120,10 +111,8 @@ export default {
         createTime: ""
       },
       formInline: {
-        kitchenId: '',
         foodName: '',
       },
-      kitchenData: [],
       listData: [],
       pageIndex: 1,
       pageSize: 15,
@@ -142,7 +131,6 @@ export default {
   methods: {
     getAdminList (pageIndex = 1, pageSize = 15) {
       let datas = {
-        kitchenId: Number(this.formInline.kitchenId),
         foodName: this.formInline.foodName,
         pageIndex: pageIndex,
         pageSize: pageSize
@@ -157,7 +145,6 @@ export default {
 
               rowId: rowId,
               id: el.id,
-              kitchenName: el.kitchenName,
               foodName: el.foodName,
               price: el.price,
               createTime: el.createTime,
@@ -167,7 +154,6 @@ export default {
           });
           total = res.data.total;
         }
-        console.log(list);
         this.listData = list;
         this.pageTotal = total;
       });
@@ -243,8 +229,8 @@ export default {
         }
       });
     },
-    deleteAdminInfo (id) {
-      OrderModule.deleteAdminInfo(id).then(res => {
+    deleteFoodInfo (id) {
+      OrderModule.deleteFoodInfo(id).then(res => {
         if (res.data) {
           if (res.data.err == 0) {
             this.$message({
@@ -255,26 +241,6 @@ export default {
           }
         }
       });
-    },
-    getKitchenSelect () {
-      PublicModule.getKitchenSelect().then(res => {
-        if (res.data) {
-          let list = [];
-          res.data.list.forEach((el, i) => {
-            list.push({
-
-              id: el.id,
-              name: el.kitchenName,
-
-            });
-          });
-          this.kitchenData = list;
-        }
-      });
-    },
-    // 重置
-    resetForm () {
-      this.formInline.userName = '';
     },
     clearForm () {
 
@@ -406,7 +372,6 @@ export default {
     },
   },
   mounted () {
-    this.getKitchenSelect();
     this.getAdminList();
   }
 }

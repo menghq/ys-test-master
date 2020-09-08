@@ -12,8 +12,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/apis': {
-        target: 'http://localhost:8088/apis/', // 接口域名
-        // target: 'http://cherry-admin.food-edu.net/apis/', // 接口域名
+        target: 'http://localhost:8078/apis/', // 接口域名
+        // target: 'http://meal-admin.food-edu.net/apis/', // 接口域名
         ws: true,
         changeOrigin: false, //是否跨域
         pathRewrite: {
@@ -23,8 +23,8 @@ module.exports = {
     },
 
     // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
-    port: 9988, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    host: '0.0.0.0', // can be overwritten by process.env.HOST
+    port: 9978, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: true,

@@ -10,32 +10,10 @@
                   range-separator="至" start-placeholder="用餐开始日期" end-placeholder="用餐结束日期" align="right">
                 </el-date-picker>
               </el-form-item>
-              <el-form-item prop="statementBy" style="width:150px;">
-                <el-select v-model.trim="formInline.statementBy" placeholder="请选择类型" size="small">
-                  <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in statementByArr" :key="`${_uid}_${index}`"
-                    :label="item" :value="index">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item prop="schoolId" style="width:150px;">
-                <el-select v-if="formInline.statementBy=='diner'" clearable @change="handleSchoolChange" v-model.trim="formInline.schoolId" placeholder="请选择学校" size="small">
-                  <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in schoolData" :key="`${_uid}_${index}`"
-                    :label="item.name" :value="item.id">
-                  </el-option>
-                </el-select>
-              </el-form-item>
               <el-form-item v-if="formInline.statementBy=='diner'" prop="gradeId" style="width:150px;">
-                <el-select clearable @change="handleGradeChange" filterable v-model.trim="formInline.gradeId" placeholder="请选择年级"
+                <el-select clearable filterable v-model.trim="formInline.gradeId" placeholder="请选择部门"
                   size="small">
                   <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in gradeData" :key="`${_uid}_${index}`"
-                    :label="item.name" :value="item.id">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-              <el-form-item v-if="formInline.statementBy=='diner'" prop="classId" style="width:150px;">
-                <el-select clearable filterable v-model.trim="formInline.classId" placeholder="请选择班级"
-                  size="small">
-                  <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in classData" :key="`${_uid}_${index}`"
                     :label="item.name" :value="item.id">
                   </el-option>
                 </el-select>
@@ -53,27 +31,13 @@
         <el-table :data="listData" border style="width: 100%">
           <el-table-column prop="rowId" label='序号' width="50">
           </el-table-column>
-          <el-table-column prop="schoolName" width="200" label='学校名称'>
+          <el-table-column v-if="tableType=='diner'" prop="dinerName" label='人员姓名'>
           </el-table-column>
-          <el-table-column v-if="tableType=='diner'" prop="dinerName" label='人员名称'>
-          </el-table-column>
-          <el-table-column v-if="tableType=='diner'" prop="gradeName" label='年级'>
-          </el-table-column>
-          <el-table-column v-if="tableType=='diner'" prop="className" label='班级'>
+          <el-table-column v-if="tableType=='diner'" prop="gradeName" label='部门'>
           </el-table-column>
           <el-table-column prop="incomeAmount" label='充值金额'>
           </el-table-column>
-          <el-table-column v-if="tableType=='school'" prop="incomeCount" label='充值笔数'>
-          </el-table-column>
-          <el-table-column prop="refundAmount" label='提现金额'>
-          </el-table-column>
-          <el-table-column v-if="tableType=='school'" prop="refundCount" label='提现笔数'>
-          </el-table-column>
-          <el-table-column v-if="tableType=='school'" prop="dinerCount" label='用餐人数'>
-          </el-table-column>
-          <el-table-column v-if="tableType=='school'" prop="cancelAmount" label='取消订单金额'>
-          </el-table-column>
-          <el-table-column v-if="tableType=='school'" prop="cancelCount" label='取消订单份数'>
+          <el-table-column prop="refundAmount" label='消费金额'>
           </el-table-column>
           <el-table-column prop="finishAmount" label='完成订单金额'>
           </el-table-column>
@@ -106,7 +70,7 @@ export default {
       formTitle: "",
       form: {
         id: 0,
-        statementBy: 'school',
+        statementBy: 'diner',
         money: '',
         repeatPassword: '',
         roleId: "",
@@ -116,14 +80,14 @@ export default {
       },
       formInline: {
         dateVals: [],
-        statementBy: 'school',
+        statementBy: 'diner',
         schoolId: '',
         gradeId: '',
         classId: '',
       },
       tableType: 'school',
       statementByArr: {
-        'school': "按学校", 'diner': "按用餐人员"
+        'school': "按总览", 'diner': "按用餐人员"
       },
       schoolData: [],
       gradeData: [],
@@ -159,9 +123,7 @@ export default {
       let datas = {
         dateRange: this.formInline.dateVals == null ? [] : this.formInline.dateVals,
         statementBy: this.formInline.statementBy,
-        schoolId: Number(this.formInline.schoolId),
         gradeId: Number(this.formInline.gradeId),
-        classId: Number(this.formInline.classId),
         pageIndex: pageIndex,
         pageSize: pageSize
       };
@@ -175,9 +137,7 @@ export default {
 
               rowId: rowId,
               id: el.id,
-              schoolName: el.schoolName,
               gradeName: el.gradeName,
-              className: el.className,
               dinerName: el.dinerName,
               incomeAmount: el.incomeAmount,
               incomeCount: el.incomeCount,
@@ -248,26 +208,6 @@ export default {
         }
       });
     },
-    getSchoolSelect () {
-      PublicModule.getSchoolSelect().then(res => {
-        if (res.data) {
-          let list = [];
-          res.data.list.forEach((el, i) => {
-            list.push({
-
-              id: el.id,
-              name: el.schoolName,
-
-            });
-          });
-          this.schoolData = list;
-          this.formInline.gradeId = "";
-          this.gradeData = [];
-          this.formInline.classId = "";
-          this.classData = [];
-        }
-      });
-    },
     getGradeSelect () {
       let datas = {
         schoolId: Number(this.formInline.schoolId)
@@ -289,31 +229,6 @@ export default {
           this.classData = [];
         }
       });
-    },
-    getClassSelect () {
-      let datas = {
-        schoolId: Number(this.formInline.schoolId),
-        gradeId: Number(this.formInline.gradeId)
-      };
-      PublicModule.getClassSelect(datas).then(res => {
-        if (res.data) {
-          let list = [];
-          res.data.list.forEach((el, i) => {
-            list.push({
-
-              id: el.id,
-              name: el.className,
-
-            });
-          });
-          this.formInline.classId = "";
-          this.classData = list;
-        }
-      });
-    },
-    // 重置
-    resetForm () {
-      this.formInline.userName = '';
     },
     clearForm () {
 
@@ -382,7 +297,7 @@ export default {
     },
   },
   mounted () {
-    this.getSchoolSelect();
+    this.getGradeSelect();
     this.getStatementList();
   }
 }

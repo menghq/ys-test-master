@@ -11,7 +11,7 @@
                 </el-date-picker>
               </el-form-item>
               <el-form-item prop="gradeId" style="width:150px;">
-                <el-select clearable @change="handleGradeChange" filterable v-model.trim="formInline.gradeId" placeholder="请选择部门"
+                <el-select clearable filterable v-model.trim="formInline.gradeId" placeholder="请选择部门"
                   size="small">
                   <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in gradeData" :key="`${_uid}_${index}`"
                     :label="item.name" :value="item.id">
@@ -97,11 +97,13 @@
           </el-table-column>
           <el-table-column prop="payMoney" label='实付金额' width='80'>
           </el-table-column>
+          <el-table-column prop="takeMealMode" label='取餐方式'>
+          </el-table-column>
           <el-table-column prop="orderStatus" label='订单状态' width='80'>
           </el-table-column>
           <el-table-column fixed="right" align="center" label="操作" width="100">
             <template slot-scope="scope">
-              <el-button v-if="scope.row.orderStatus!='已取消'" @click="deleteUser(scope.row)" type="text" size="small">取消</el-button>
+              <el-button v-if="scope.row.orderStatus!='已退款'" @click="deleteUser(scope.row)" type="text" size="small">退款</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -118,7 +120,7 @@
               <el-form :model="form" :rules="rules" label-width="120px" ref="ruleForm">
                 <el-form-item label="日期：" prop="mealDate">
                   <el-date-picker v-model="form.mealDate" @change="changeFormDate" value-format="yyyy-MM-dd" type="date" size="small"
-                    placeholder="用餐开始日期" align="right">
+                    placeholder="用餐日期" align="right">
                   </el-date-picker>
                 </el-form-item>
                 <el-form-item label="餐段：" prop="mealTime">
@@ -128,8 +130,8 @@
                     </el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="学校：" prop="gradeId">
-                  <el-select clearable v-model.trim="form.gradeId" placeholder="请选择部门" style="width:150px;" size="small">
+                <el-form-item label="部门：" prop="gradeId">
+                  <el-select clearable @change="handleFromGradeChange" v-model.trim="form.gradeId" placeholder="请选择部门" style="width:150px;" size="small">
                     <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in form.gradeData" :key="`${_uid}_${index}`"
                       :label="item.name" :value="item.id">
                     </el-option>
@@ -195,7 +197,12 @@ export default {
       orderStatusArr: {
         'PAID': "未完成",
         'FINISH': "已完成",
-        'CANCELED': "已取消",
+        'CANCELED': "已退款",
+      },
+      takeMealModeArr: {
+        'CANTEEN': "堂食预定",
+        'CABINET': "保温柜预定",
+        'ORDERMACHINE': "窗口点餐",
       },
       gradeData: [],
       listData: [],
@@ -264,6 +271,7 @@ export default {
               foodName: el.foodName,
               totalMoney: this.formatAmount(el.totalMoney),
               payMoney: this.formatAmount(el.payMoney),
+              takeMealMode: el.takeMealMode == 'CABINET' ? this.takeMealModeArr[el.takeMealMode] + "(" + el.deviceName + el.cabinetCellId + ")" : this.takeMealModeArr[el.takeMealMode],
               orderStatus: this.orderStatusArr[el.orderState],
 
             });
@@ -279,29 +287,9 @@ export default {
         this.paySum = this.formatAmount(paySum);
       });
     },
-    getSchoolSelect () {
-      PublicModule.getSchoolSelect().then(res => {
-        if (res.data) {
-          let list = [];
-          res.data.list.forEach((el, i) => {
-            list.push({
-
-              id: el.id,
-              name: el.schoolName,
-
-            });
-          });
-          this.schoolData = list;
-          this.formInline.gradeId = "";
-          this.gradeData = [];
-          this.formInline.classId = "";
-          this.classData = [];
-        }
-      });
-    },
     getGradeSelect () {
       let datas = {
-        schoolId: Number(this.formInline.schoolId)
+        schoolId: 1
       };
       PublicModule.getGradeSelect(datas).then(res => {
         if (res.data) {
@@ -321,46 +309,6 @@ export default {
         }
       });
     },
-    getClassSelect () {
-      let datas = {
-        schoolId: Number(this.formInline.schoolId),
-        gradeId: Number(this.formInline.gradeId)
-      };
-      PublicModule.getClassSelect(datas).then(res => {
-        if (res.data) {
-          let list = [];
-          res.data.list.forEach((el, i) => {
-            list.push({
-
-              id: el.id,
-              name: el.className,
-
-            });
-          });
-          this.formInline.classId = "";
-          this.classData = list;
-        }
-      });
-    },
-    getKitchenSelect () {
-      let datas = {
-      };
-      PublicModule.getKitchenSelect(datas).then(res => {
-        if (res.data) {
-          let list = [];
-          res.data.list.forEach((el, i) => {
-            list.push({
-
-              id: el.id,
-              name: el.kitchenName,
-
-            });
-          });
-          this.formInline.kitchenId = "";
-          this.kitchenData = list;
-        }
-      });
-    },
     // 分页
     handleSizeChange (val) {
       this.pageSize = val;
@@ -370,13 +318,8 @@ export default {
       this.pageIndex = val;
       this.getOrderList(val, this.pageSize);
     },
-    handleSchoolChange (value) {
-      this.getGradeSelect();
-    },
-    handleGradeChange (value) {
-      this.getClassSelect();
-    },
-    handleClassChange (value) {
+    handleFromGradeChange () {
+      this.getFormDinerSelect();
     },
     changeDate () {
       if (!this.formInline.dateVals) {
@@ -445,11 +388,12 @@ export default {
       }
       this.dialogVisible = true;
       this.getFormGradeSelect();
+      this.getFormFoodSelect();
     },
     getFormGradeSelect () {
       this.form.classData = [];
       let datas = {
-        schoolId: Number(this.form.schoolId),
+        schoolId: 1,
       };
       PublicModule.getGradeSelect(datas).then(res => {
         if (res.data) {
@@ -468,7 +412,7 @@ export default {
     },
     getFormFoodSelect () {
       let datas = {
-        kitchenId: Number(this.form.kitchenId),
+        kitchenId: 1,
       };
       PublicModule.getFoodSelect(datas).then(res => {
         if (res.data) {
@@ -487,7 +431,7 @@ export default {
     },
     getFormDinerSelect () {
       let datas = {
-        classId: Number(this.form.classId),
+        gradeId: Number(this.form.gradeId),
       };
       PublicModule.getDinerSelect(datas).then(res => {
         if (res.data) {
@@ -538,6 +482,7 @@ export default {
     },
   },
   mounted () {
+    this.getGradeSelect();
     this.getOrderList();
   }
 }

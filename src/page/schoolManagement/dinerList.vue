@@ -36,6 +36,8 @@
           </el-table-column>
           <el-table-column prop="gradeName" label='部门'>
           </el-table-column>
+          <el-table-column prop="dinerType" label='身份'>
+          </el-table-column>
           <el-table-column prop="money" label='余额'>
           </el-table-column>
           <el-table-column prop="status" label='状态'>
@@ -66,6 +68,13 @@
                     <el-select v-model.trim="form.gradeId" placeholder="请选择部门" style="width:150px;" size="small">
                       <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in form.gradeData" :key="`${_uid}_${index}`"
                         :label="item.name" :value="item.id">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="角色：" prop="dinerType">
+                    <el-select v-model.trim="form.dinerType" placeholder="请选择角色" style="width:150px;" size="small">
+                      <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in dinerTypeArr" :key="`${_uid}_${index}`"
+                        :label="item" :value="index">
                       </el-option>
                     </el-select>
                   </el-form-item>
@@ -107,34 +116,32 @@ export default {
       importDialogVisible: false,
       form: {
         id: '',
-        schoolId: '',
         gradeId: '',
-        classId: '',
+        dinerType: '',
         dinerName: '',
         mobilePhone: '',
         status: '0',
-        schoolData: [],
         gradeData: [],
-        classData: [],
       },
       formImport: {
         previewName: "",
         file: ""
       },
       formInline: {
-        schoolId: '',
         gradeId: '',
-        classId: '',
         dinerName: '',
         mobilePhone: '',
+      },
+      dinerTypeArr: {
+        'STAFF': '正式职工',
+        'JOBBER': '临时职工',
+        'OTHERS': '其他人员',
       },
       statusArr: {
         '0': '正常',
         '1': '停餐',
       },
-      schoolData: [],
       gradeData: [],
-      classData: [],
       listData: [],
       pageIndex: 1,
       pageSize: 15,
@@ -169,6 +176,7 @@ export default {
               rowId: rowId,
               id: el.id,
               dinerName: el.dinerName,
+              dinerType: this.dinerTypeArr[el.dinerType],
               gradeName: el.gradeName,
               money: el.money,
               status: this.statusArr[el.status],
@@ -228,6 +236,7 @@ export default {
           this.form.id = data.id;
           this.form.gradeId = data.gradeId;
           this.form.gradeName = data.gradeName;
+          this.form.dinerType = data.dinerType;
           this.form.dinerName = data.dinerName;
           this.form.mobilePhone = data.mobilePhone;
           this.form.status = data.status + "";
@@ -239,6 +248,7 @@ export default {
     addDinerInfo () {
       let datas = {
         gradeId: Number(this.form.gradeId),
+        dinerType: this.form.dinerType,
         dinerName: this.form.dinerName,
         mobilePhone: this.form.mobilePhone,
         status: this.form.status,
@@ -265,6 +275,7 @@ export default {
       let datas = {
         id: this.form.id,
         gradeId: Number(this.form.gradeId),
+        dinerType: this.form.dinerType,
         dinerName: this.form.dinerName,
         mobilePhone: this.form.mobilePhone,
         status: this.form.status,
@@ -281,7 +292,7 @@ export default {
           } else if (res.data.err == 1) {
             this.$message({
               type: 'error',
-              message: '请选择班级!'
+              message: '请选择部门!'
             });
           } else if (res.data.err == 2) {
             this.$message({
@@ -313,6 +324,7 @@ export default {
       this.isAdd = false;
       this.form.id = '';
       this.form.gradeId = '';
+      this.form.dinerType = '';
       this.form.dinerName = '';
       this.form.mobilePhone = '';
       this.form.status = '';
@@ -329,6 +341,7 @@ export default {
       this.isAdd = true;
       this.form.id = '';
       this.form.gradeId = '';
+      this.form.dinerType = '';
       this.form.dinerName = '';
       this.form.mobilePhone = '';
       this.dialogVisible = true;
