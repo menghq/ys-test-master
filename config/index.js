@@ -15,7 +15,7 @@ module.exports = {
         target: 'http://localhost:8078/apis/', // 接口域名
         // target: 'http://meal-admin.food-edu.net/apis/', // 接口域名
         ws: true,
-        changeOrigin: false, //是否跨域
+        changeOrigin: true, //是否跨域
         pathRewrite: {
           '^/apis': ''
         }

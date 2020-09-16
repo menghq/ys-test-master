@@ -27,6 +27,50 @@
           </el-row>
         </el-form>
       </div>
+      <div class="dataTotal">
+        <el-row>
+          <el-col :span="6">
+            <div>
+              <div class="left">充值金额合计
+                <el-tooltip class="item" effect="dark" content="筛选结果的充值金额合计" placement="top-start">
+                  <i class="el-icon-question"></i>
+                </el-tooltip>
+              </div>
+              <div class="num">{{showTotel.totalSum}}</div>
+            </div>
+          </el-col>
+          <el-col :span="6">
+            <div>
+              <div class="left">消费金额合计
+                <el-tooltip class="item" effect="dark" content="筛选结果的消费金额合计" placement="top-start">
+                  <i class="el-icon-question"></i>
+                </el-tooltip>
+              </div>
+              <div class="num">{{showTotel.paySum}}</div>
+            </div>
+          </el-col>
+          <el-col :span="6">
+            <div>
+              <div class="left">完成订单合计
+                <el-tooltip class="item" effect="dark" content="筛选结果的完成订单合计" placement="top-start">
+                  <i class="el-icon-question"></i>
+                </el-tooltip>
+              </div>
+              <div class="num">{{showTotel.finishTotal}}</div>
+            </div>
+          </el-col>
+          <el-col :span="6">
+            <div>
+              <div class="left">完成订单份数合计
+                <el-tooltip class="item" effect="dark" content="筛选结果的完成订单份数合计" placement="top-start">
+                  <i class="el-icon-question"></i>
+                </el-tooltip>
+              </div>
+              <div class="num">{{showTotel.amountTotal}}</div>
+            </div>
+          </el-col>
+        </el-row>
+      </div>
       <div class="tableCom" style="margin-top: 15px;">
         <el-table :data="listData" border style="width: 100%">
           <el-table-column prop="rowId" label='序号' width="50">
@@ -68,6 +112,12 @@ export default {
     return {
       isAdd: false,
       formTitle: "",
+      showTotel:{
+        totalSum: 0,
+        paySum: 0,
+        finishTotal: 0,
+        amountTotal: 0
+      },
       form: {
         id: 0,
         statementBy: 'diner',
