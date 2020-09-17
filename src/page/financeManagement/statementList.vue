@@ -27,6 +27,7 @@
           </el-row>
         </el-form>
       </div>
+
       <div class="dataTotal">
         <el-row>
           <el-col :span="6">
@@ -203,6 +204,13 @@ export default {
             rowId++;
           });
           total = res.data.total;
+
+          if(pageIndex == 1){
+            this.showTotel.totalSum = res.data.sumCount[0].incomeAmount
+            this.showTotel.paySum = res.data.sumCount[0].refundAmount
+            this.showTotel.finishTotal = res.data.sumCount[0].finishAmount
+            this.showTotel.amountTotal = res.data.sumCount[0].finishCount
+          }
         }
         console.log(list);
         this.listData = list;
@@ -362,5 +370,28 @@ export default {
 }
 .queryList /deep/ .el-form-item__label {
   font-size: 13px !important;
+}
+.dataTotal {
+  margin-top: 15px;
+  text-align: center;
+  padding: 5px;
+  border: 1px solid #eee;
+  font-size: 12px;
+}
+.dataTotal .num {
+  color: #f56c6c;
+  font-size: 16px;
+  padding: 5px 0;
+}
+.dataTotal .left {
+  padding: 5px 0;
+}
+.dataTotal .left i {
+  color: #409eff;
+  font-size: 14px;
+  margin-left: 3px;
+}
+.dataTotal .el-col {
+  border-right: 4px solid #409eff;
 }
 </style>
