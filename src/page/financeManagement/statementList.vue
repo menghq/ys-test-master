@@ -22,6 +22,7 @@
             <el-col :span="3">
               <el-form-item style="float: right;">
                 <el-button size="small" type="primary" @click="submitForm('formInline')">查询</el-button>
+                <el-button size="small" type="primary" @click="exportExcel()">导出数据</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -100,6 +101,8 @@
 </template>
 <script>
 import { PublicModule, FinanceModule } from "@/api/common";
+import { outExportExcel, formatTime } from "@/utils/tool"
+
 export default {
   name: 'userList',
   data () {
@@ -170,11 +173,51 @@ export default {
     }
   },
   methods: {
+    exportExcel(){
+      let datas = {
+        dateRange: this.formInline.dateVals == null ? [] : this.formInline.dateVals,
+        statementBy: this.formInline.statementBy,
+        gradeId: Number(this.formInline.gradeId),
+        isPage: 0
+      };
+
+      FinanceModule.getStatementList(datas).then(res => {
+        let list = [];
+        if (res.data) {
+          res.data.list.forEach((el, i) => {
+            list.push({
+              rowId: i+1,
+              gradeName: el.gradeName,
+              dinerName: el.dinerName,
+              incomeAmount: el.incomeAmount,
+              refundAmount: el.refundAmount,
+              finishAmount: el.finishAmount,
+              finishCount: el.finishCount,
+            });
+          });
+
+          const tableHeader = ['序号', '人员姓名', '部门', '充值金额', '消费金额', '完成订单金额', '完成订单份数']
+          const tableKey = ['rowId', 'dinerName', 'gradeName', 'incomeAmount', 'refundAmount', 'finishAmount', 'finishCount']
+          outExportExcel(
+            tableHeader,
+            tableKey,
+            list,
+            '对帐统计报表-'+formatTime(new Date())
+          )
+        }
+      }).catch(err=>{
+        this.$message({
+          type: 'error',
+          message: '导出失败!'
+        });
+      });
+    },
     getStatementList (pageIndex = 1, pageSize = 15) {
       let datas = {
         dateRange: this.formInline.dateVals == null ? [] : this.formInline.dateVals,
         statementBy: this.formInline.statementBy,
         gradeId: Number(this.formInline.gradeId),
+        isPage: 1,
         pageIndex: pageIndex,
         pageSize: pageSize
       };

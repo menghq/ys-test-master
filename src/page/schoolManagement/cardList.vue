@@ -28,6 +28,7 @@
             <el-col :span="6">
               <el-form-item style="float: right;">
                 <el-button size="small" type="primary" @click="submitForm('formInline')">查询</el-button>
+                <el-button size="small" type="primary" @click="exportExcel()">导出数据</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -107,6 +108,8 @@
 </template>
 <script>
 import { PublicModule, CardModule } from "@/api/common";
+import { outExportExcel, formatTime } from "@/utils/tool"
+
 export default {
   data () {
     return {
@@ -147,6 +150,45 @@ export default {
     this.getDataList();
   },
   methods: {
+    exportExcel(){
+      let datas = {
+        gradeId: Number(this.formInline.gradeId),
+        cardStatus: Number(this.formInline.cardStatus),
+        cardNum: this.formInline.cardNum,
+        userName: this.formInline.dinerName,
+        isPage: 0
+      };
+
+      CardModule.getCardList(datas).then(res => {
+        let list = [];
+        if (res.data) {
+          res.data.list.forEach((el, i) => {
+            list.push({
+              rowId: i + 1,
+              id: el.id,
+              card_number: el.card_number,
+              card_uuid: el.card_uuid,
+              userName: el.username,
+              grade_name: el.grade_name,
+              status: this.statusArr[0].title,//el.status],
+            });
+          })
+        }
+        const tableHeader = ['序号', '餐卡编号', '餐卡UUID', '绑定人员', '部门', '状态']
+        const tableKey = ['rowId', 'card_number', 'card_uuid', 'userName', 'grade_name', 'status']
+        outExportExcel(
+          tableHeader,
+          tableKey,
+          list,
+          '餐卡管理报表-' + formatTime(new Date())
+        )
+      }).catch(err=>{
+        this.$message({
+          type: 'error',
+          message: '导出失败!'
+        });
+      })
+    },
     changeData(info){
       this.$confirm(`确定解除此卡的绑定吗?`, '提示', {
         confirmButtonText: '确定',
@@ -203,7 +245,7 @@ export default {
                 card_number: el.card_number,
                 card_uuid: el.card_uuid,
                 userName: el.username,
-                grade_name: el.grade_id ? this.getUserGrade(el.grade_id):"",
+                grade_name: el.grade_name,
                 status: this.statusArr[0].title,//el.status],
               });
               rowId++;
