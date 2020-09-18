@@ -27,6 +27,8 @@
           </el-table-column>
           <el-table-column prop="price" width="200" label='价格'>
           </el-table-column>
+          <el-table-column prop="foodType" width="200" label='菜品类型'>
+          </el-table-column>
           <el-table-column prop="createTime" label='创建时间'>
           </el-table-column>
 
@@ -66,6 +68,11 @@
                       </el-form-item>
                       <el-form-item label="价格：" prop="price">
                         <el-input size="small" clearable v-model.trim="form.price" placeholder="请输入菜品价格" style="width:180px;"></el-input>
+                      </el-form-item>
+                      <el-form-item label="菜品类型：" prop="foodType">
+                        <el-select v-model.trim="form.foodType" placeholder="请选择" size="small">
+                          <el-option v-for="ft in mfoodType" element-loading-spinner="el-icon-loading" :label="ft.title" :value="ft.code"/>
+                        </el-select>
                       </el-form-item>
                       <el-form-item label="创建时间：" v-if="isAdd == false" prop="createTime">
                         <span>{{form.createTime}}</span>
@@ -108,6 +115,7 @@ export default {
         foodName: '',
         foodDesc: '',
         price: '',
+        foodType: '',
         createTime: ""
       },
       formInline: {
@@ -117,6 +125,7 @@ export default {
       pageIndex: 1,
       pageSize: 15,
       pageTotal: 0,
+      mfoodType:[{code:"NORMAL", title: "可存餐柜"}, {code:"FLUIDS", title: "非存餐柜"}],
       rules: {
         foodName: [
           { required: true, message: '请输入菜品名称', trigger: ['blur', 'change'] },
@@ -138,17 +147,25 @@ export default {
       KitchenModule.getFoodList(datas).then(res => {
         let list = [];
         let total = 0;
+        let curFoodType = "";
         let rowId = (pageIndex - 1) * pageSize + 1;
         if (res.data) {
           res.data.list.forEach((el, i) => {
-            list.push({
+            curFoodType = this.mfoodType[0].title;
+            this.mfoodType.forEach((v, i)=>{
+              if(v.title == el.food_type){
+                curFoodType = v.title;
+                return;
+              }
+            });
 
+            list.push({
               rowId: rowId,
               id: el.id,
               foodName: el.foodName,
               price: el.price,
+              foodType: curFoodType,
               createTime: el.createTime,
-
             });
             rowId++;
           });
@@ -170,6 +187,7 @@ export default {
             foodName: data.foodName,
             foodDesc: data.foodDesc,
             price: data.price,
+            foodType: data.food_type,
             createTime: data.createTime,
 
           };
@@ -183,6 +201,7 @@ export default {
         foodThumb: this.form.foodThumb,
         foodName: this.form.foodName,
         foodDesc: this.form.foodDesc,
+        foodType: this.form.foodType,
         price: this.form.price
       };
       KitchenModule.addFoodInfo(data).then(res => {
@@ -209,6 +228,7 @@ export default {
         foodThumb: this.form.foodThumb,
         foodName: this.form.foodName,
         foodDesc: this.form.foodDesc,
+        foodType: this.form.foodType,
         price: this.form.price
       };
       OrderModule.updateFoodInfo(data).then(res => {
@@ -252,6 +272,7 @@ export default {
         id: 0,
         foodName: '',
         foodDesc: '',
+        foodType: '',
         price: ''
       };
     },
@@ -358,7 +379,7 @@ export default {
         // this.$message({
         //     type: 'info',
         //     message: '已取消删除'
-        // });          
+        // });
       });
     },
     // 分页

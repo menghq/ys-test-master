@@ -14,7 +14,7 @@
               <el-form-item prop="gradeId">
                 <el-select clearable filterable v-model.trim="formInline.gradeId" placeholder="请选择部门"
                            size="small">
-                  <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in gradeData" :label="item.name" :value="item.id">
+                  <el-option element-loading-spinner="el-icon-loading" v-for="item in gradeData" :label="item.name" :value="item.id">
                   </el-option>
                 </el-select>
               </el-form-item>

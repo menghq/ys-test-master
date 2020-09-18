@@ -175,7 +175,12 @@
                       :key="index"
                     >
                       <div>{{item.foodName}}</div>
-                      <div>{{item.price}}</div>
+                      <div style="margin: 8px 0px;">{{item.price}}</div>
+                      <div>
+                          <el-select v-model.trim="item.foodType" placeholder="请选择" size="small">
+                            <el-option v-for="ft in mfoodType" element-loading-spinner="el-icon-loading" :label="ft.title" :value="ft.num"/>
+                          </el-select>
+                      </div>
                     </el-checkbox-button>
                   </el-checkbox-group>
                 </div>
@@ -223,6 +228,8 @@ export default {
       formInline: {
         menuName: "",
       },
+      sfoodType:[],
+      mfoodType:[{num:0, title:"全部"}, {num:1, title:"预定"}, {num:2, title:"现点"}],
       menuCatArr: {
         1: "周度菜单",
         2: "月度菜单",
@@ -405,17 +412,26 @@ export default {
         let list = [];
         if (res.data) {
           let data = res.data.list;
-
+          let curFoodType = 0;
           data.forEach((el, i) => {
+
+            curFoodType = 0;
+            this.sfoodType.forEach((v, i)=>{
+              if(v.id == el.id){
+                curFoodType = v.foodType;
+                return;
+              }
+            });
+
             list.push({
               id: el.id,
               foodName: el.foodName,
               price: el.price,
+              foodType: curFoodType
             });
           });
 
           this.foodData = list;
-          console.log(this.foodData);
         }
       });
     },
@@ -517,11 +533,22 @@ export default {
       });
     },
     updateMenuFoodInfo() {
+
+      let foodSelectType = []
+      this.foodData.forEach((el, i) => {
+        if((','+this.foodSelect+',').indexOf(','+el.id+',') > -1)
+        {
+          foodSelectType.push(el.foodType);
+        }
+      });
+
       let data = {
         id: this.foodId,
         menuId: this.form.id,
         contentId: this.foodSelect,
+        ftypeId: foodSelectType
       };
+
       OrderModule.updateMenuFoodInfo(data).then((res) => {
         if (res.data) {
           if (res.data.err == 0) {
@@ -557,11 +584,15 @@ export default {
       this.choseFoodVisible = true;
       let food = this.menuFoodData[id];
       let foodSelect = [];
+      let foodType = [];
       food.content.forEach((el, i) => {
         foodSelect.push(el.id);
+        foodType.push({id:el.id, foodType:el.foodType});
       });
       this.foodId = food.id;
       this.foodSelect = foodSelect;
+      this.sfoodType = foodType;
+
       this.getFoodSelect();
     },
     getRangeWeekList() {
