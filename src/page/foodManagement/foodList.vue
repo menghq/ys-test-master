@@ -51,7 +51,7 @@
                 <el-row>
                   <el-col :span="24">
                     <div class="grid-content bg-purple">
-                      <el-form-item label="封面图片：" prop="foodImg" v-if="1==2">
+                      <el-form-item label="封面图片：" prop="foodImg">
                         <el-upload class="avatar-uploader" action="" :show-file-list="false" :auto-upload="false"
                           :on-change="changeFoodImgChange" :on-success="handleFoodImgSuccess" :before-upload="beforeFoodImgUpload">
                           <img v-if="form.foodThumb" :src="form.foodThumb" class="thumb">

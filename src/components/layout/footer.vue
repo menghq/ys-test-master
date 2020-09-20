@@ -1,7 +1,6 @@
 <template>
   <div class="footer">
-    <div>霍州煤电集团吕临能化有限公司智慧食堂超级管理系统</div>
-    <div>&copy 2020 东莞优膳物联科技有限公司 技术支持</div>
+    <div>&copy 2020 霍州煤电集团吕临能化有限公司智慧食堂超级管理系统</div>
   </div>
 </template>
 
