@@ -166,15 +166,14 @@ export default {
               rowId: i + 1,
               id: el.id,
               card_number: el.card_number,
-              card_uuid: el.card_uuid,
               userName: el.username,
               grade_name: el.grade_name,
               status: this.statusArr[0].title,//el.status],
             });
           })
         }
-        const tableHeader = ['序号', '餐卡编号', '餐卡UUID', '绑定人员', '部门', '状态']
-        const tableKey = ['rowId', 'card_number', 'card_uuid', 'userName', 'grade_name', 'status']
+        const tableHeader = ['序号', '餐卡编号', '绑定人员', '部门', '状态']
+        const tableKey = ['rowId', 'card_number', 'userName', 'grade_name', 'status']
         outExportExcel(
           tableHeader,
           tableKey,
