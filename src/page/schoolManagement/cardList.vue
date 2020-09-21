@@ -37,8 +37,7 @@
       <div class="tableCom" style="margin-top: 15px;">
         <el-table :data="listData" border style="width: 100%">
           <el-table-column prop="rowId" label='序号' width="100"/>
-          <el-table-column prop="card_number" width="200" label='餐卡编号'/>
-          <el-table-column prop="card_uuid" label='餐卡UUID'/>
+          <el-table-column prop="card_number" label='餐卡编号'/>
           <el-table-column prop="userName" width="300" label='绑定人员'/>
           <el-table-column prop="grade_name" width="200" label='部门'/>
           <el-table-column prop="status" width="100" label='状态'/>
@@ -64,7 +63,7 @@
                 <el-row>
                   <el-col :span="24">
                     <div class="grid-content bg-purple">
-                      <el-form-item label="餐卡编号：">
+                      <el-form-item label="卡号：">
                         {{form.cardNum}}
                       </el-form-item>
                       <el-form-item label="所属部门：" prop="gradeId">
@@ -97,10 +96,10 @@
 
             </div>
           </div>
-          <span slot="footer" class="dialog-footer">
+          <div slot="footer" class="dialog-footer" style="padding: 0px 30px;">
             <el-button @click="cancelForm()" size="mini">取消</el-button>
             <el-button type="primary" @click="submitFormData('ruleForm')" size="mini">保存</el-button>
-          </span>
+          </div>
         </el-dialog>
       </div>
     </div>
@@ -374,7 +373,7 @@ export default {
       this.cancelForm();
       this.form = {
         id: info.id,
-        cardNum: info.card_uuid,
+        cardNum: info.card_number,
         gradeId: '',
         dinerId: '',
         status: 1,
