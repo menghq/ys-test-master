@@ -46,6 +46,17 @@ export default [
           icon: 'el-icon-food', //el-icon-truck
         },
         component: () => import('@/page/schoolManagement/dinerList'),
+      },
+      {
+        path: 'cardList',
+        name: 'cardList',
+        role: ["user", "all"],
+        sliderShow: true,
+        meta: {
+          title: '餐卡列表',
+          icon: 'el-icon-food', //el-icon-truck
+        },
+        component: () => import('@/page/schoolManagement/cardList'),
       }]
   },
   {

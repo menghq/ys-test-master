@@ -22,10 +22,56 @@
             <el-col :span="3">
               <el-form-item style="float: right;">
                 <el-button size="small" type="primary" @click="submitForm('formInline')">查询</el-button>
+                <el-button size="small" type="primary" @click="exportExcel()">导出数据</el-button>
               </el-form-item>
             </el-col>
           </el-row>
         </el-form>
+      </div>
+
+      <div class="dataTotal">
+        <el-row>
+          <el-col :span="6">
+            <div>
+              <div class="left">充值金额合计
+                <el-tooltip class="item" effect="dark" content="筛选结果的充值金额合计" placement="top-start">
+                  <i class="el-icon-question"></i>
+                </el-tooltip>
+              </div>
+              <div class="num">{{showTotel.totalSum}}</div>
+            </div>
+          </el-col>
+          <el-col :span="6">
+            <div>
+              <div class="left">消费金额合计
+                <el-tooltip class="item" effect="dark" content="筛选结果的消费金额合计" placement="top-start">
+                  <i class="el-icon-question"></i>
+                </el-tooltip>
+              </div>
+              <div class="num">{{showTotel.paySum}}</div>
+            </div>
+          </el-col>
+          <el-col :span="6">
+            <div>
+              <div class="left">完成订单合计
+                <el-tooltip class="item" effect="dark" content="筛选结果的完成订单合计" placement="top-start">
+                  <i class="el-icon-question"></i>
+                </el-tooltip>
+              </div>
+              <div class="num">{{showTotel.finishTotal}}</div>
+            </div>
+          </el-col>
+          <el-col :span="6">
+            <div>
+              <div class="left">完成订单份数合计
+                <el-tooltip class="item" effect="dark" content="筛选结果的完成订单份数合计" placement="top-start">
+                  <i class="el-icon-question"></i>
+                </el-tooltip>
+              </div>
+              <div class="num">{{showTotel.amountTotal}}</div>
+            </div>
+          </el-col>
+        </el-row>
       </div>
       <div class="tableCom" style="margin-top: 15px;">
         <el-table :data="listData" border style="width: 100%">
@@ -55,6 +101,8 @@
 </template>
 <script>
 import { PublicModule, FinanceModule } from "@/api/common";
+import { outExportExcel, formatTime } from "@/utils/tool"
+
 export default {
   name: 'userList',
   data () {
@@ -68,6 +116,12 @@ export default {
     return {
       isAdd: false,
       formTitle: "",
+      showTotel:{
+        totalSum: 0,
+        paySum: 0,
+        finishTotal: 0,
+        amountTotal: 0
+      },
       form: {
         id: 0,
         statementBy: 'diner',
@@ -119,11 +173,51 @@ export default {
     }
   },
   methods: {
+    exportExcel(){
+      let datas = {
+        dateRange: this.formInline.dateVals == null ? [] : this.formInline.dateVals,
+        statementBy: this.formInline.statementBy,
+        gradeId: Number(this.formInline.gradeId),
+        isPage: 0
+      };
+
+      FinanceModule.getStatementList(datas).then(res => {
+        let list = [];
+        if (res.data) {
+          res.data.list.forEach((el, i) => {
+            list.push({
+              rowId: i+1,
+              gradeName: el.gradeName,
+              dinerName: el.dinerName,
+              incomeAmount: el.incomeAmount,
+              refundAmount: el.refundAmount,
+              finishAmount: el.finishAmount,
+              finishCount: el.finishCount,
+            });
+          });
+
+          const tableHeader = ['序号', '人员姓名', '部门', '充值金额', '消费金额', '完成订单金额', '完成订单份数']
+          const tableKey = ['rowId', 'dinerName', 'gradeName', 'incomeAmount', 'refundAmount', 'finishAmount', 'finishCount']
+          outExportExcel(
+            tableHeader,
+            tableKey,
+            list,
+            '对帐统计报表-'+formatTime(new Date())
+          )
+        }
+      }).catch(err=>{
+        this.$message({
+          type: 'error',
+          message: '导出失败!'
+        });
+      });
+    },
     getStatementList (pageIndex = 1, pageSize = 15) {
       let datas = {
         dateRange: this.formInline.dateVals == null ? [] : this.formInline.dateVals,
         statementBy: this.formInline.statementBy,
         gradeId: Number(this.formInline.gradeId),
+        isPage: 1,
         pageIndex: pageIndex,
         pageSize: pageSize
       };
@@ -153,6 +247,13 @@ export default {
             rowId++;
           });
           total = res.data.total;
+
+          if(pageIndex == 1){
+            this.showTotel.totalSum = res.data.sumCount[0].incomeAmount
+            this.showTotel.paySum = res.data.sumCount[0].refundAmount
+            this.showTotel.finishTotal = res.data.sumCount[0].finishAmount
+            this.showTotel.amountTotal = res.data.sumCount[0].finishCount
+          }
         }
         console.log(list);
         this.listData = list;
@@ -312,5 +413,28 @@ export default {
 }
 .queryList /deep/ .el-form-item__label {
   font-size: 13px !important;
+}
+.dataTotal {
+  margin-top: 15px;
+  text-align: center;
+  padding: 5px;
+  border: 1px solid #eee;
+  font-size: 12px;
+}
+.dataTotal .num {
+  color: #f56c6c;
+  font-size: 16px;
+  padding: 5px 0;
+}
+.dataTotal .left {
+  padding: 5px 0;
+}
+.dataTotal .left i {
+  color: #409eff;
+  font-size: 14px;
+  margin-left: 3px;
+}
+.dataTotal .el-col {
+  border-right: 4px solid #409eff;
 }
 </style>

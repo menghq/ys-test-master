@@ -64,7 +64,7 @@ export function getDateWeek() {/* 得到当前日期的时间戳 */
         return {
             date,
             week,
-            wholeDate 
+            wholeDate
         }
     })
 　　return dateWeek;
@@ -96,5 +96,26 @@ export function timestamp(time) {
     image.src = imgsrc;
 }
 
-  
- 
+export function formatTime(date) {
+  /* 从Date对象（标准时间格式）返回对应数据 */
+  var date = new Date(date);
+  let year = date.getFullYear();
+  let month = date.getMonth();
+  let day = date.getDate();
+  let hour = date.getHours();
+  let minute = date.getMinutes();
+  let second = date.getSeconds();
+  return year + '-' + month + '-' + day;
+}
+
+// 导出的方法  tHeader => 设置Excel的表格第一行的标题  filterVal => 对象的属性key值 被导出listData => 导出数据  => 导出(文件)名称
+export function outExportExcel(tHeader = [], filterVal = [], listData = [], exportName = new Date().getTime()) {
+  require.ensure([], () => {
+    // 注意这个Export2Excel路径
+    const { export_json_to_excel } = require('@/components/excel/Export2Excel');
+    const data =  listData.map(v => filterVal.map(j => v[j]));
+    export_json_to_excel(tHeader, data, exportName);
+  });
+}
+
+
