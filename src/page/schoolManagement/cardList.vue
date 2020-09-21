@@ -28,7 +28,7 @@
             <el-col :span="6">
               <el-form-item style="float: right;">
                 <el-button size="small" type="primary" @click="submitForm('formInline')">查询</el-button>
-                <el-button size="small" type="primary" @click="exportExcel()">导出数据</el-button>
+                <el-button size="small" icon="el-icon-plus" type="default" @click="exportExcel">导出数据</el-button>
               </el-form-item>
             </el-col>
           </el-row>

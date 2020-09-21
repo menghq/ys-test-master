@@ -153,7 +153,7 @@ export default {
           res.data.list.forEach((el, i) => {
             curFoodType = this.mfoodType[0].title;
             this.mfoodType.forEach((v, i)=>{
-              if(v.title == el.food_type){
+              if(v.code == el.food_type){
                 curFoodType = v.title;
                 return;
               }
