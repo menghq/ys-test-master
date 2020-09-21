@@ -534,13 +534,17 @@ export default {
     },
     updateMenuFoodInfo() {
 
-      let foodSelectType = []
-      this.foodData.forEach((el, i) => {
-        if((','+this.foodSelect+',').indexOf(','+el.id+',') > -1)
-        {
-          foodSelectType.push(el.foodType);
-        }
-      });
+      let foodSelectType = [];
+      let fArr = this.foodSelect.toString().split(',');
+      fArr.forEach((v,i)=>{
+        this.foodData.forEach((el, i) => {
+          if(v == el.id)
+          {
+            foodSelectType.push(el.foodType);
+            return;
+          }
+        });
+      })
 
       let data = {
         id: this.foodId,

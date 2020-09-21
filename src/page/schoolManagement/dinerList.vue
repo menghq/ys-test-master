@@ -23,6 +23,7 @@
               <el-form-item style="float: right;">
                 <el-button size="small" type="primary" @click="submitForm('formInline')">查询</el-button>
                 <el-button size="small" icon="el-icon-plus" type="default" @click="addUser">添加人员</el-button>
+                <el-button size="small" icon="el-icon-plus" type="default" @click="exportExcel">导出数据</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -107,6 +108,8 @@
 </template>
 <script>
 import { PublicModule, SchoolModule, OrderModule } from "@/api/common";
+import { outExportExcel, formatTime } from "@/utils/tool";
+
 export default {
   name: 'userList',
   data () {
@@ -157,6 +160,46 @@ export default {
     }
   },
   methods: {
+    exportExcel(){
+      let datas = {
+        gradeId: Number(this.formInline.gradeId),
+        dinerName: this.formInline.dinerName,
+        mobilePhone: this.formInline.mobilePhone,
+        isPage: 0
+      };
+
+      SchoolModule.getDinerList(datas).then(res => {
+        let list = [];
+        if (res.data) {
+          res.data.list.forEach((el, i) => {
+            list.push({
+              rowId: i+1,
+              id: el.id,
+              dinerName: el.dinerName,
+              dinerType: this.dinerTypeArr[el.dinerType],
+              gradeName: el.gradeName,
+              money: el.money,
+              status: this.statusArr[el.status],
+              createTime: el.createTime,
+            });
+          });
+
+          const tableHeader = ['序号', '姓名', '部门', '身份', '余额', '状态', '创建时间']
+          const tableKey = ['rowId', 'dinerName', 'gradeName', 'dinerType', 'money', 'status', 'createTime']
+          outExportExcel(
+            tableHeader,
+            tableKey,
+            list,
+            '人员列表-'+formatTime(new Date())
+          )
+        }
+      }).catch(err=>{
+        this.$message({
+          type: 'error',
+          message: '导出失败!'
+        });
+      });
+    },
     getDinerList (pageIndex = 1, pageSize = 15) {
       let datas = {
         gradeId: Number(this.formInline.gradeId),
@@ -394,7 +437,7 @@ export default {
         // this.$message({
         //     type: 'info',
         //     message: '已取消删除'
-        // });         
+        // });
       });
     },
     // 分页

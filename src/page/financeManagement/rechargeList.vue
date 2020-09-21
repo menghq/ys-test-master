@@ -31,6 +31,7 @@
               <el-form-item style="float: right;">
                 <el-button size="small" type="primary" @click="submitForm('formInline')">查询</el-button>
                 <el-button size="small" icon="el-icon-plus" type="default" @click="addRecharge">手动充值</el-button>
+                <el-button size="small" icon="el-icon-plus" type="default" @click="exportRecharge">导出数据</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -117,6 +118,7 @@
 </template>
 <script>
 import { PublicModule, FinanceModule } from "@/api/common";
+import { outExportExcel, formatTime } from "@/utils/tool";
 export default {
   name: "userList",
   data() {
@@ -175,6 +177,47 @@ export default {
     };
   },
   methods: {
+    exportRecharge(){
+
+      let datas = {
+        dateRange:
+          this.formInline.dateVals == null ? [] : this.formInline.dateVals,
+        action: "RECHARGE",
+        dinerName: this.formInline.dinerName,
+        isPage: 0
+      };
+
+      FinanceModule.getWalletLogList(datas).then(res => {
+        let list = [];
+        if (res.data) {
+          res.data.list.forEach((el, i) => {
+            list.push({
+              rowId: i+1,
+              id: el.id,
+              outTradeNo: el.outTradeNo,
+              dinerName: el.dinerName,
+              action: this.transactionTypeArr[el.transactionType],
+              money: el.money,
+              createTime: el.createTime,
+            });
+          });
+
+          const tableHeader = ['序号', '充值时间', '人员姓名', '金额']
+          const tableKey = ['rowId', 'createTime', 'dinerName', 'money']
+          outExportExcel(
+            tableHeader,
+            tableKey,
+            list,
+            '充值记录报表-'+formatTime(new Date())
+          )
+        }
+      }).catch(err=>{
+        this.$message({
+          type: 'error',
+          message: '导出失败!'
+        });
+      });
+    },
     getWalletLogList(pageIndex = 1, pageSize = 15) {
       let datas = {
         dateRange:
