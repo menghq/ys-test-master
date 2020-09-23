@@ -300,8 +300,8 @@ export default {
           res.data.list.forEach((el, i) => {
             list.push({
               id: el.id,
-              title: el.card_uuid?el.username+' --- '+el.card_uuid:el.username,
-              status: el.card_uuid?1:0
+              title: el.card_number?el.username+' --- '+el.card_number:el.username,
+              status: el.card_number?1:0
             });
           });
           this.gradeCardData = list;
