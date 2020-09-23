@@ -6,8 +6,12 @@
           <el-row>
             <el-col :span="18">
               <el-form-item prop="foodName" style="width:150px;">
-                <el-input size="small" clearable v-model.trim="formInline.foodName" placeholder="请输入菜品名称">
-                </el-input>
+                <el-input
+                  size="small"
+                  clearable
+                  v-model.trim="formInline.foodName"
+                  placeholder="请输入菜品名称"
+                ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -21,18 +25,19 @@
       </div>
       <div class="tableCom" style="margin-top: 15px;">
         <el-table :data="listData" border style="width: 100%">
-          <el-table-column prop="rowId" label='序号' width="50">
-          </el-table-column>
-          <el-table-column prop="foodName" width="200" label='菜品名称'>
-          </el-table-column>
-          <el-table-column prop="price" width="200" label='价格'>
-          </el-table-column>
-          <el-table-column prop="foodType" width="200" label='菜品类型'>
-          </el-table-column>
-          <el-table-column prop="createTime" label='创建时间'>
-          </el-table-column>
+          <el-table-column prop="rowId" label="序号" width="50"></el-table-column>
+          <el-table-column prop="foodName" width="200" label="菜品名称"></el-table-column>
+          <el-table-column prop="price" width="200" label="价格"></el-table-column>
+          <el-table-column prop="foodType" width="200" label="菜品类型"></el-table-column>
+          <el-table-column prop="createTime" label="创建时间"></el-table-column>
 
-          <el-table-column fixed="right" style="display:none;" align="center" label="操作" width="100">
+          <el-table-column
+            fixed="right"
+            style="display:none;"
+            align="center"
+            label="操作"
+            width="100"
+          >
             <template slot-scope="scope">
               <el-button @click="goToDetail(scope.row.id)" type="text" size="small">详情</el-button>
               <el-button @click="deleteFood(scope.row)" type="text" size="small">删除</el-button>
@@ -41,37 +46,79 @@
         </el-table>
       </div>
       <div class="pagination" style="margin-top: 15px;">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[15, 30, 45, 60]" :page-size="100"
-          layout="total, sizes, prev, pager, next, jumper" :total=pageTotal>
-        </el-pagination>
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :page-sizes="[15, 30, 45, 60]"
+          :page-size="100"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="pageTotal"
+        ></el-pagination>
       </div>
       <div class="dialogBox">
-        <el-dialog :title="formTitle" :visible.sync="dialogVisible" @close="cancelForm" :show-close="true" width="750px">
+        <el-dialog
+          :title="formTitle"
+          :visible.sync="dialogVisible"
+          @close="cancelForm"
+          :show-close="true"
+          width="750px"
+        >
           <div class="wrapper">
             <div>
               <el-form :model="form" :rules="rules" label-width="100px" ref="ruleForm">
                 <el-row>
                   <el-col :span="24">
                     <div class="grid-content bg-purple">
-                      <el-form-item label="封面图片：" prop="foodImg" v-if="1==2">
-                        <el-upload class="avatar-uploader" action="" :show-file-list="false" :auto-upload="false"
-                          :on-change="changeFoodImgChange" :on-success="handleFoodImgSuccess" :before-upload="beforeFoodImgUpload">
-                          <img v-if="form.foodThumb" :src="form.foodThumb" class="thumb">
+                      <el-form-item label="封面图片：" prop="foodImg">
+                        <el-upload
+                          class="avatar-uploader"
+                          action
+                          :show-file-list="false"
+                          :auto-upload="false"
+                          :on-change="changeFoodImgChange"
+                          :on-success="handleFoodImgSuccess"
+                          :before-upload="beforeFoodImgUpload"
+                        >
+                          <img v-if="form.foodThumb" :src="form.foodThumb" class="thumb" />
                           <i v-else class="el-icon-plus avatar-uploader-icon">{{form.foodThumb}}</i>
                         </el-upload>
                       </el-form-item>
                       <el-form-item label="菜品名称：" prop="foodName">
-                        <el-input size="small" clearable v-model.trim="form.foodName" placeholder="请输入菜品名称" style="width:180px;"></el-input>
+                        <el-input
+                          size="small"
+                          clearable
+                          v-model.trim="form.foodName"
+                          placeholder="请输入菜品名称"
+                          style="width:180px;"
+                        ></el-input>
                       </el-form-item>
                       <el-form-item label="描述：" prop="foodDesc">
-                        <el-input size="small" clearable v-model.trim="form.foodDesc" placeholder="请输入菜品描述" style="width:90%;"></el-input>
+                        <el-input
+                          size="small"
+                          clearable
+                          v-model.trim="form.foodDesc"
+                          placeholder="请输入菜品描述"
+                          style="width:90%;"
+                        ></el-input>
                       </el-form-item>
                       <el-form-item label="价格：" prop="price">
-                        <el-input size="small" clearable v-model.trim="form.price" placeholder="请输入菜品价格" style="width:180px;"></el-input>
+                        <el-input
+                          size="small"
+                          clearable
+                          v-model.trim="form.price"
+                          placeholder="请输入菜品价格"
+                          style="width:180px;"
+                        ></el-input>
                       </el-form-item>
                       <el-form-item label="菜品类型：" prop="foodType">
                         <el-select v-model.trim="form.foodType" placeholder="请选择" size="small">
-                          <el-option v-for="ft in mfoodType" element-loading-spinner="el-icon-loading" :label="ft.title" :value="ft.code"/>
+                          <el-option
+                            v-for="(ft, index) in mfoodType"
+                            element-loading-spinner="el-icon-loading"
+                            :key="index"
+                            :label="ft.title"
+                            :value="ft.code"
+                          />
                         </el-select>
                       </el-form-item>
                       <el-form-item label="创建时间：" v-if="isAdd == false" prop="createTime">
@@ -81,7 +128,6 @@
                   </el-col>
                 </el-row>
               </el-form>
-
             </div>
           </div>
           <span slot="footer" class="dialog-footer">
@@ -96,15 +142,15 @@
 <script>
 import { PublicModule, KitchenModule, OrderModule } from "@/api/common";
 export default {
-  name: 'userList',
-  data () {
+  name: "userList",
+  data() {
     const validateRepeatPassword = (rule, value, callback) => {
       if (this.form.repeatPassword != this.form.newPassword) {
-        callback(new Error('两次密码不一致'));
+        callback(new Error("两次密码不一致"));
       }
 
       callback();
-    }
+    };
     return {
       isAdd: false,
       formTitle: "",
@@ -112,39 +158,56 @@ export default {
       form: {
         id: 0,
         foodThumb: "",
-        foodName: '',
-        foodDesc: '',
-        price: '',
-        foodType: '',
-        createTime: ""
+        foodName: "",
+        foodDesc: "",
+        price: "",
+        foodType: "",
+        createTime: "",
       },
       formInline: {
-        foodName: '',
+        foodName: "",
       },
       listData: [],
       pageIndex: 1,
       pageSize: 15,
       pageTotal: 0,
-      mfoodType:[{code:"NORMAL", title: "可存餐柜"}, {code:"FLUIDS", title: "非存餐柜"}],
+      mfoodType: [
+        { code: "NORMAL", title: "可存餐柜" },
+        { code: "FLUIDS", title: "非存餐柜" },
+      ],
       rules: {
         foodName: [
-          { required: true, message: '请输入菜品名称', trigger: ['blur', 'change'] },
-          { required: true, min: 2, max: 128, message: '菜品名称不能小于2或大于128个字符', trigger: ['blur', 'change'] }
+          {
+            required: true,
+            message: "请输入菜品名称",
+            trigger: ["blur", "change"],
+          },
+          {
+            required: true,
+            min: 2,
+            max: 128,
+            message: "菜品名称不能小于2或大于128个字符",
+            trigger: ["blur", "change"],
+          },
         ],
         price: [
-          { required: true, message: '请选择菜品价格', trigger: ['blur', 'change'] },
+          {
+            required: true,
+            message: "请选择菜品价格",
+            trigger: ["blur", "change"],
+          },
         ],
-      }
-    }
+      },
+    };
   },
   methods: {
-    getAdminList (pageIndex = 1, pageSize = 15) {
+    getAdminList(pageIndex = 1, pageSize = 15) {
       let datas = {
         foodName: this.formInline.foodName,
         pageIndex: pageIndex,
-        pageSize: pageSize
+        pageSize: pageSize,
       };
-      KitchenModule.getFoodList(datas).then(res => {
+      KitchenModule.getFoodList(datas).then((res) => {
         let list = [];
         let total = 0;
         let curFoodType = "";
@@ -152,8 +215,8 @@ export default {
         if (res.data) {
           res.data.list.forEach((el, i) => {
             curFoodType = this.mfoodType[0].title;
-            this.mfoodType.forEach((v, i)=>{
-              if(v.code == el.food_type){
+            this.mfoodType.forEach((v, i) => {
+              if (v.code == el.food_type) {
                 curFoodType = v.title;
                 return;
               }
@@ -175,13 +238,12 @@ export default {
         this.pageTotal = total;
       });
     },
-    getFoodInfo (id) {
-      KitchenModule.getFoodInfo(id).then(res => {
+    getFoodInfo(id) {
+      KitchenModule.getFoodInfo(id).then((res) => {
         if (res.data) {
           let data = res.data;
 
           let info = {
-
             id: data.id,
             foodThumb: data.foodThumb,
             foodName: data.foodName,
@@ -189,157 +251,151 @@ export default {
             price: data.price,
             foodType: data.food_type,
             createTime: data.createTime,
-
           };
 
           this.form = info;
         }
       });
     },
-    addFoodInfo () {
+    addFoodInfo() {
       let data = {
         foodThumb: this.form.foodThumb,
         foodName: this.form.foodName,
         foodDesc: this.form.foodDesc,
         foodType: this.form.foodType,
-        price: this.form.price
+        price: this.form.price,
       };
-      KitchenModule.addFoodInfo(data).then(res => {
+      KitchenModule.addFoodInfo(data).then((res) => {
         if (res.data) {
           if (res.data.err == 0) {
             this.$message({
-              type: 'success',
-              message: '保存成功!'
+              type: "success",
+              message: "保存成功!",
             });
             this.dialogVisible = false;
             this.getAdminList();
           } else {
             this.$message({
-              type: 'error',
-              message: '保存失败!'
+              type: "error",
+              message: "保存失败!",
             });
           }
         }
       });
     },
-    updateFoodInfo () {
+    updateFoodInfo() {
       let data = {
         id: this.form.id,
         foodThumb: this.form.foodThumb,
         foodName: this.form.foodName,
         foodDesc: this.form.foodDesc,
         foodType: this.form.foodType,
-        price: this.form.price
+        price: this.form.price,
       };
-      OrderModule.updateFoodInfo(data).then(res => {
+      OrderModule.updateFoodInfo(data).then((res) => {
         if (res.data) {
           if (res.data.err == 0) {
             this.$message({
-              type: 'success',
-              message: '保存成功!'
+              type: "success",
+              message: "保存成功!",
             });
             this.dialogVisible = false;
             this.getAdminList();
           } else {
             this.$message({
-              type: 'error',
-              message: '保存失败!'
+              type: "error",
+              message: "保存失败!",
             });
           }
         }
       });
     },
-    deleteFoodInfo (id) {
-      OrderModule.deleteFoodInfo(id).then(res => {
+    deleteFoodInfo(id) {
+      OrderModule.deleteFoodInfo(id).then((res) => {
         if (res.data) {
           if (res.data.err == 0) {
             this.$message({
-              type: 'success',
-              message: '删除成功!'
+              type: "success",
+              message: "删除成功!",
             });
             this.getAdminList();
           }
         }
       });
     },
-    clearForm () {
-
-      if (this.$refs['ruleForm']) {
-        this.$refs['ruleForm'].resetFields();
+    clearForm() {
+      if (this.$refs["ruleForm"]) {
+        this.$refs["ruleForm"].resetFields();
       }
 
       this.form = {
         id: 0,
-        foodName: '',
-        foodDesc: '',
-        foodType: '',
-        price: ''
+        foodName: "",
+        foodDesc: "",
+        foodType: "",
+        price: "",
       };
     },
-    beforeFoodImgUpload () {
-
-    },
-    handleFoodImgSuccess () {
-    },
-    changeFoodImgChange (file, fileList) {
+    beforeFoodImgUpload() {},
+    handleFoodImgSuccess() {},
+    changeFoodImgChange(file, fileList) {
       console.log(file);
 
-      const isJPG = file.raw.type === 'image/jpeg';
+      const isJPG = file.raw.type === "image/jpeg";
       const isLt2M = file.raw.size / 1024 / 1024 < 2;
 
       if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!');
+        this.$message.error("上传头像图片只能是 JPG 格式!");
       }
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!');
+        this.$message.error("上传头像图片大小不能超过 2MB!");
       }
 
-      this.getBase64(file.raw).then(res => {
-        const params = res.split(',')
+      this.getBase64(file.raw).then((res) => {
+        const params = res.split(",");
         if (params.length > 0) {
           this.uploadFoodImg(res);
         }
-      })
-
+      });
     },
-    getBase64 (file) {
+    getBase64(file) {
       return new Promise(function (resolve, reject) {
-        const reader = new FileReader()
-        let imgResult = ''
-        reader.readAsDataURL(file)
+        const reader = new FileReader();
+        let imgResult = "";
+        reader.readAsDataURL(file);
         reader.onload = function () {
-          imgResult = reader.result
-        }
+          imgResult = reader.result;
+        };
         reader.onerror = function (error) {
-          reject(error)
-        }
+          reject(error);
+        };
         reader.onloadend = function () {
-          resolve(imgResult)
-        }
-      })
+          resolve(imgResult);
+        };
+      });
     },
-    uploadFoodImg (file) {
+    uploadFoodImg(file) {
       let datas = {
-        file: file
+        file: file,
       };
-      OrderModule.uploadFoodImg(datas).then(res => {
+      OrderModule.uploadFoodImg(datas).then((res) => {
         if (res.data) {
           this.form.foodThumb = res.data.foodThumb;
         }
       });
     },
     // 查询
-    submitForm () {
+    submitForm() {
       this.getAdminList();
     },
     // 添加用户
-    addUser () {
+    addUser() {
       this.formTitle = "新增菜品";
       this.isAdd = true;
       this.dialogVisible = true;
       this.clearForm();
     },
-    goToDetail (id) {
+    goToDetail(id) {
       this.formTitle = "编辑菜品";
       this.isAdd = false;
       this.dialogVisible = true;
@@ -347,7 +403,7 @@ export default {
       this.getFoodInfo(id);
     },
     // 提交添加用户
-    submitAddForm (formName) {
+    submitAddForm(formName) {
       let that = this;
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -357,45 +413,47 @@ export default {
             this.updateFoodInfo();
           }
         } else {
-          console.log('error submit!!');
+          console.log("error submit!!");
           return false;
         }
       });
     },
     // 取消提交
-    cancelForm () {
+    cancelForm() {
       this.dialogVisible = false;
     },
     // 删除
-    deleteFood (row) {
-      this.$confirm(`是否删除菜品名称为"${row.foodName}"的菜品?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.deleteFoodInfo(row.id);
-        // 成功后回掉
-      }).catch(() => {
-        // this.$message({
-        //     type: 'info',
-        //     message: '已取消删除'
-        // });
-      });
+    deleteFood(row) {
+      this.$confirm(`是否删除菜品名称为"${row.foodName}"的菜品?`, "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.deleteFoodInfo(row.id);
+          // 成功后回掉
+        })
+        .catch(() => {
+          // this.$message({
+          //     type: 'info',
+          //     message: '已取消删除'
+          // });
+        });
     },
     // 分页
-    handleSizeChange (val) {
+    handleSizeChange(val) {
       this.pageSize = val;
       this.getAdminList(this.pageIndex, val);
     },
-    handleCurrentChange (val) {
+    handleCurrentChange(val) {
       this.pageIndex = val;
       this.getAdminList(val, this.pageSize);
     },
   },
-  mounted () {
+  mounted() {
     this.getAdminList();
-  }
-}
+  },
+};
 </script>
 <style lang="">
 .queryList {
