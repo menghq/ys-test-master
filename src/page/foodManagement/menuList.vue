@@ -5,7 +5,7 @@
         <el-form :inline="true" :model="formInline" class="form-inline">
           <el-row>
             <el-col :span="18">
-              <el-form-item prop="menuName" style="width:150px;">
+              <el-form-item prop="menuName" style="width: 150px">
                 <el-input
                   size="small"
                   clearable
@@ -15,37 +15,69 @@
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item style="float: right;">
-                <el-button size="small" type="primary" @click="submitForm('formInline')">查询</el-button>
-                <el-button size="small" icon="el-icon-plus" type="default" @click="addUser">添加菜单</el-button>
+              <el-form-item style="float: right">
+                <el-button
+                  size="small"
+                  type="primary"
+                  @click="submitForm('formInline')"
+                  >查询</el-button
+                >
+                <el-button
+                  size="small"
+                  icon="el-icon-plus"
+                  type="default"
+                  @click="addUser"
+                  >添加菜单</el-button
+                >
               </el-form-item>
             </el-col>
           </el-row>
         </el-form>
       </div>
-      <div class="tableCom" style="margin-top: 15px;">
+      <div class="tableCom" style="margin-top: 15px">
         <el-table :data="listData" border style="width: 100%">
-          <el-table-column prop="rowId" label="序号" width="50"></el-table-column>
+          <el-table-column
+            prop="rowId"
+            label="序号"
+            width="50"
+          ></el-table-column>
           <el-table-column prop="menuName" label="菜单名称"></el-table-column>
-          <el-table-column prop="menuCat" width="80" label="类型"></el-table-column>
-          <el-table-column prop="menuType" width="80" label="餐段"></el-table-column>
-          <el-table-column prop="rangeName" width="220" label="时段"></el-table-column>
+          <el-table-column
+            prop="menuCat"
+            width="80"
+            label="类型"
+          ></el-table-column>
+          <el-table-column
+            prop="menuType"
+            width="80"
+            label="餐段"
+          ></el-table-column>
+          <el-table-column
+            prop="rangeName"
+            width="220"
+            label="时段"
+          ></el-table-column>
           <el-table-column prop="createTime" label="创建时间"></el-table-column>
 
           <el-table-column
             fixed="right"
-            style="display:none;"
+            style="display: none"
             align="center"
             label="操作"
             width="200"
           >
             <template slot-scope="scope">
-              <el-button @click="goToDetail(scope.row.id)" type="text" size="small">查看</el-button>
+              <el-button
+                @click="goToDetail(scope.row.id)"
+                type="text"
+                size="small"
+                >查看</el-button
+              >
             </template>
           </el-table-column>
         </el-table>
       </div>
-      <div class="pagination" style="margin-top: 15px;">
+      <div class="pagination" style="margin-top: 15px">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -65,11 +97,20 @@
         >
           <div class="wrapper">
             <div>
-              <el-form :model="form" :rules="rules" label-width="100px" ref="ruleForm">
+              <el-form
+                :model="form"
+                :rules="rules"
+                label-width="100px"
+                ref="ruleForm"
+              >
                 <el-row>
                   <div class="grid-content bg-purple">
-                    <el-form-item label="菜单名称：" v-if="isAdd == false" prop="menuName">
-                      <span>{{form.menuName}}</span>
+                    <el-form-item
+                      label="菜单名称："
+                      v-if="isAdd == false"
+                      prop="menuName"
+                    >
+                      <span>{{ form.menuName }}</span>
                     </el-form-item>
                     <el-form-item label="菜单名称：" v-else prop="menuName">
                       <el-input
@@ -77,20 +118,37 @@
                         clearable
                         v-model.trim="form.menuName"
                         placeholder="请输入菜单名称"
-                        style="width:180px;"
+                        style="width: 180px"
                       ></el-input>
                     </el-form-item>
-                    <el-form-item label="类型：" v-if="isAdd == false" prop="menuCat">
-                      <span>{{form.menuCatName}}</span>
+                    <el-form-item
+                      label="类型："
+                      v-if="isAdd == false"
+                      prop="menuCat"
+                    >
+                      <span>{{ form.menuCatName }}</span>
                     </el-form-item>
                     <el-form-item label="类型：" v-else prop="menuCat">
-                      <el-radio v-model="form.menuCat" @change="changeMenuCat" label="1">周度菜单</el-radio>
+                      <el-radio
+                        v-model="form.menuCat"
+                        @change="changeMenuCat"
+                        label="1"
+                        >周度菜单</el-radio
+                      >
                     </el-form-item>
-                    <el-form-item label="时段：" v-if="isAdd == false" prop="rangeId">
-                      <span>{{form.rangeName}}</span>
+                    <el-form-item
+                      label="时段："
+                      v-if="isAdd == false"
+                      prop="rangeId"
+                    >
+                      <span>{{ form.rangeName }}</span>
                     </el-form-item>
                     <el-form-item label="时段：" v-else prop="rangeId">
-                      <el-select style="width:300px;" v-model="form.rangeId" placeholder="请选择日期时段">
+                      <el-select
+                        style="width: 300px"
+                        v-model="form.rangeId"
+                        placeholder="请选择日期时段"
+                      >
                         <el-option
                           v-for="item in rangeData"
                           :key="item.id"
@@ -99,28 +157,47 @@
                         ></el-option>
                       </el-select>
                     </el-form-item>
-                    <el-form-item label="餐段：" v-if="isAdd == false" prop="menuType">
-                      <span>{{form.menuTypeName}}</span>
+                    <el-form-item
+                      label="餐段："
+                      v-if="isAdd == false"
+                      prop="menuType"
+                    >
+                      <span>{{ form.menuTypeName }}</span>
                     </el-form-item>
                     <el-form-item label="餐段：" v-else prop="menuType">
-                      <el-radio v-model="form.menuType" label="1">早餐</el-radio>
-                      <el-radio v-model="form.menuType" label="2">午餐</el-radio>
-                      <el-radio v-model="form.menuType" label="3">晚餐</el-radio>
+                      <el-radio v-model="form.menuType" label="1"
+                        >早餐</el-radio
+                      >
+                      <el-radio v-model="form.menuType" label="2"
+                        >午餐</el-radio
+                      >
+                      <el-radio v-model="form.menuType" label="3"
+                        >晚餐</el-radio
+                      >
                     </el-form-item>
-                    <el-form-item label="创建时间：" v-if="isAdd == false" prop="createTime">
-                      <span>{{form.createTime}}</span>
+                    <el-form-item
+                      label="创建时间："
+                      v-if="isAdd == false"
+                      prop="createTime"
+                    >
+                      <span>{{ form.createTime }}</span>
                     </el-form-item>
                   </div>
                 </el-row>
               </el-form>
 
               <el-row v-if="isAdd == false">
-                <div class="food-table" style="margin-top: 15px;">
-                  <el-table :data="menuFoodData" border :show-header="false" style="width: 100%">
+                <div class="food-table" style="margin-top: 15px">
+                  <el-table
+                    :data="menuFoodData"
+                    border
+                    :show-header="false"
+                    style="width: 100%"
+                  >
                     <el-table-column align="center" width="200">
                       <template slot-scope="scope">
-                        <div>{{scope.row.orderDate}}</div>
-                        <div>{{scope.row.orderWeekday}}</div>
+                        <div>{{ scope.row.orderDate }}</div>
+                        <div>{{ scope.row.orderWeekday }}</div>
                       </template>
                     </el-table-column>
                     <el-table-column align="center">
@@ -128,18 +205,43 @@
                         <div class="food-list">
                           <div
                             class="food-item"
-                            v-for="(item, index) in scope.row.content"
-                            v-bind:key="index"
+                            v-for="(item, i1) in scope.row.content.hotList"
+                            v-bind:key="i1"
                           >
-                            <div class="food-name">{{item.foodName}}</div>
-                            <div class="food-price">{{item.price}}</div>
+                            <div class="food-name">{{ item.foodName }}</div>
+                            <div class="food-price">{{ item.price }}</div>
+                          </div>
+                          <div
+                            class="food-item"
+                            v-for="(item, i2) in scope.row.content.coldList"
+                            v-bind:key="i2"
+                          >
+                            <div class="food-name">{{ item.foodName }}</div>
+                            <div class="food-price">{{ item.price }}</div>
+                          </div>
+                          <div
+                            class="food-item"
+                            v-for="(item, i3) in scope.row.content.stapleList"
+                            v-bind:key="i3"
+                          >
+                            <div class="food-name">{{ item.foodName }}</div>
+                            <div class="food-price">{{ item.price }}</div>
+                          </div>
+                          <div
+                            class="food-item"
+                            v-for="(item, i4) in scope.row.content.pastryList"
+                            v-bind:key="i4"
+                          >
+                            <div class="food-name">{{ item.foodName }}</div>
+                            <div class="food-price">{{ item.price }}</div>
                           </div>
                           <div class="food-item">
                             <el-button
                               @click="choseFood(scope.row.rowId)"
                               type="text"
                               size="small"
-                            >编辑</el-button>
+                              >编辑</el-button
+                            >
                           </div>
                         </div>
                       </template>
@@ -151,7 +253,12 @@
           </div>
           <span slot="footer" class="dialog-footer" v-if="isAdd == true">
             <el-button @click="cancelForm()" size="mini">取消</el-button>
-            <el-button type="primary" @click="submitAddForm('ruleForm')" size="mini">保存</el-button>
+            <el-button
+              type="primary"
+              @click="submitAddForm('ruleForm')"
+              size="mini"
+              >保存</el-button
+            >
           </span>
         </el-dialog>
       </div>
@@ -165,23 +272,60 @@
         >
           <div class="wrapper">
             <el-row>
-              <div class="tableCom" style="margin-top: 15px;">
+              <div class="tableCom" style="margin-top: 15px">
                 <div class="food-list">
-                  <el-checkbox-group v-model="foodSelect" @change="changeChoseFood">
-                    <el-checkbox-button
-                      class="chose-item"
-                      v-for="(item, index) in foodData"
-                      :label="item.id"
-                      :key="index"
-                    >
-                      <div>{{item.foodName}}</div>
-                      <div style="margin: 8px 0px;">{{item.price}}</div>
-                      <div>
-                          <el-select v-model.trim="item.foodType" placeholder="请选择" size="small">
-                            <el-option v-for="ft in mfoodType" element-loading-spinner="el-icon-loading" :label="ft.title" :value="ft.num"/>
-                          </el-select>
-                      </div>
-                    </el-checkbox-button>
+                  <el-checkbox-group
+                    v-model="foodSelect"
+                    @change="changeChoseFood"
+                  >
+                    <el-divider>热菜</el-divider>
+                    <el-row>
+                      <el-checkbox-button
+                        class="chose-item"
+                        v-for="(item, index) in foodData.hotList"
+                        :label="item.id"
+                        :key="index"
+                      >
+                        <div>{{ item.foodName }}</div>
+                        <div style="margin-top: 10px">{{ item.price }}</div>
+                      </el-checkbox-button>
+                    </el-row>
+                    <el-divider>凉菜</el-divider>
+                    <el-row>
+                      <el-checkbox-button
+                        class="chose-item"
+                        v-for="(item, index) in foodData.coldList"
+                        :label="item.id"
+                        :key="index"
+                      >
+                        <div>{{ item.foodName }}</div>
+                        <div style="margin-top: 10px">{{ item.price }}</div>
+                      </el-checkbox-button>
+                    </el-row>
+                    <el-divider>主食</el-divider>
+                    <el-row>
+                      <el-checkbox-button
+                        class="chose-item"
+                        v-for="(item, index) in foodData.stapleList"
+                        :label="item.id"
+                        :key="index"
+                      >
+                        <div>{{ item.foodName }}</div>
+                        <div style="margin-top: 10px">{{ item.price }}</div>
+                      </el-checkbox-button>
+                    </el-row>
+                    <el-divider>面点</el-divider>
+                    <el-row>
+                      <el-checkbox-button
+                        class="chose-item"
+                        v-for="(item, index) in foodData.pastryList"
+                        :label="item.id"
+                        :key="index"
+                      >
+                        <div>{{ item.foodName }}</div>
+                        <div style="margin-top: 10px">{{ item.price }}</div>
+                      </el-checkbox-button>
+                    </el-row>
                   </el-checkbox-group>
                 </div>
               </div>
@@ -189,7 +333,9 @@
           </div>
           <span slot="footer" class="dialog-footer">
             <el-button @click="closeChoseFood()" size="mini">取消</el-button>
-            <el-button type="primary" @click="submitFoodForm()" size="mini">保存</el-button>
+            <el-button type="primary" @click="submitFoodForm()" size="mini"
+              >保存</el-button
+            >
           </span>
         </el-dialog>
       </div>
@@ -228,8 +374,12 @@ export default {
       formInline: {
         menuName: "",
       },
-      sfoodType:[],
-      mfoodType:[{num:0, title:"全部"}, {num:1, title:"预定"}, {num:2, title:"现点"}],
+      sfoodType: [],
+      mfoodType: [
+        { num: 0, title: "全部" },
+        { num: 1, title: "预定" },
+        { num: 2, title: "现点" },
+      ],
       menuCatArr: {
         1: "周度菜单",
         2: "月度菜单",
@@ -253,7 +403,12 @@ export default {
       menuFoodData: [],
       foodId: 0,
       foodSelect: [],
-      foodData: [],
+      foodData: {
+        hotList: [],
+        coldList: [],
+        stapleList: [],
+        pastryList: [],
+      },
       listData: [],
       pageIndex: 1,
       pageSize: 15,
@@ -377,7 +532,6 @@ export default {
               content: el.content,
             });
           });
-
           this.menuFoodData = list;
           console.log(list);
         }
@@ -406,33 +560,57 @@ export default {
         }
       });
     },
-    getFoodSelect() {
+    getFoodSelectByCat() {
       let data = {};
-      PublicModule.getFoodSelect(data).then((res) => {
-        let list = [];
+      PublicModule.getFoodSelectByCat(data).then((res) => {
+        let hotList = [];
+        let coldList = [];
+        let stapleList = [];
+        let pastryList = [];
         if (res.data) {
-          let data = res.data.list;
-          let curFoodType = 0;
+          let data = res.data.hotList;
           data.forEach((el, i) => {
-
-            curFoodType = 0;
-            this.sfoodType.forEach((v, i)=>{
-              if(v.id == el.id){
-                curFoodType = v.foodType;
-                return;
-              }
-            });
-
-            list.push({
+            hotList.push({
               id: el.id,
               foodName: el.foodName,
               price: el.price,
-              foodType: curFoodType
             });
           });
-
-          this.foodData = list;
         }
+        if (res.data) {
+          let data = res.data.coldList;
+          data.forEach((el, i) => {
+            coldList.push({
+              id: el.id,
+              foodName: el.foodName,
+              price: el.price,
+            });
+          });
+        }
+        if (res.data) {
+          let data = res.data.stapleList;
+          data.forEach((el, i) => {
+            stapleList.push({
+              id: el.id,
+              foodName: el.foodName,
+              price: el.price,
+            });
+          });
+        }
+        if (res.data) {
+          let data = res.data.pastryList;
+          data.forEach((el, i) => {
+            pastryList.push({
+              id: el.id,
+              foodName: el.foodName,
+              price: el.price,
+            });
+          });
+        }
+        this.foodData.hotList = hotList;
+        this.foodData.coldList = coldList;
+        this.foodData.stapleList = stapleList;
+        this.foodData.pastryList = pastryList;
       });
     },
     addUser() {
@@ -533,24 +711,10 @@ export default {
       });
     },
     updateMenuFoodInfo() {
-
-      let foodSelectType = [];
-      let fArr = this.foodSelect.toString().split(',');
-      fArr.forEach((v,i)=>{
-        this.foodData.forEach((el, i) => {
-          if(v == el.id)
-          {
-            foodSelectType.push(el.foodType);
-            return;
-          }
-        });
-      })
-
       let data = {
         id: this.foodId,
         menuId: this.form.id,
         contentId: this.foodSelect,
-        ftypeId: foodSelectType
       };
 
       OrderModule.updateMenuFoodInfo(data).then((res) => {
@@ -588,16 +752,29 @@ export default {
       this.choseFoodVisible = true;
       let food = this.menuFoodData[id];
       let foodSelect = [];
-      let foodType = [];
-      food.content.forEach((el, i) => {
-        foodSelect.push(el.id);
-        foodType.push({id:el.id, foodType:el.foodType});
-      });
+      if (food.content.hotList) {
+        food.content.hotList.forEach((el, i) => {
+          foodSelect.push(el.id);
+        });
+      }
+      if (food.content.coldList) {
+        food.content.coldList.forEach((el, i) => {
+          foodSelect.push(el.id);
+        });
+      }
+      if (food.content.stapleList) {
+        food.content.stapleList.forEach((el, i) => {
+          foodSelect.push(el.id);
+        });
+      }
+      if (food.content.pastryList) {
+        food.content.pastryList.forEach((el, i) => {
+          foodSelect.push(el.id);
+        });
+      }
       this.foodId = food.id;
       this.foodSelect = foodSelect;
-      this.sfoodType = foodType;
-
-      this.getFoodSelect();
+      this.getFoodSelectByCat();
     },
     getRangeWeekList() {
       let datas = {};

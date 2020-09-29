@@ -17,6 +17,13 @@ let PublicModule = {
       data: datas
     });
   },
+  getFoodSelectByCat: function (datas) {
+    return HttpRequest.getRequest({
+      method: "POST",
+      url: `${apiUrl}/food/selectByCat`,
+      data: datas
+    });
+  },
   getSchoolSelect: function () {
     return HttpRequest.getRequest({
       method: "GET",

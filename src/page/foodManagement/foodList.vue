@@ -5,7 +5,7 @@
         <el-form :inline="true" :model="formInline" class="form-inline">
           <el-row>
             <el-col :span="18">
-              <el-form-item prop="foodName" style="width:150px;">
+              <el-form-item prop="foodName" style="width: 150px">
                 <el-input
                   size="small"
                   clearable
@@ -15,37 +15,76 @@
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item style="float: right;">
-                <el-button size="small" type="primary" @click="submitForm('formInline')">查询</el-button>
-                <el-button size="small" icon="el-icon-plus" type="default" @click="addUser">添加菜品</el-button>
+              <el-form-item style="float: right">
+                <el-button
+                  size="small"
+                  type="primary"
+                  @click="submitForm('formInline')"
+                  >查询</el-button
+                >
+                <el-button
+                  size="small"
+                  icon="el-icon-plus"
+                  type="default"
+                  @click="addUser"
+                  >添加菜品</el-button
+                >
               </el-form-item>
             </el-col>
           </el-row>
         </el-form>
       </div>
-      <div class="tableCom" style="margin-top: 15px;">
+      <div class="tableCom" style="margin-top: 15px">
         <el-table :data="listData" border style="width: 100%">
-          <el-table-column prop="rowId" label="序号" width="50"></el-table-column>
-          <el-table-column prop="foodName" width="200" label="菜品名称"></el-table-column>
-          <el-table-column prop="price" width="200" label="价格"></el-table-column>
-          <el-table-column prop="foodType" width="200" label="菜品类型"></el-table-column>
+          <el-table-column
+            prop="rowId"
+            label="序号"
+            width="50"
+          ></el-table-column>
+          <el-table-column
+            prop="foodName"
+            width="200"
+            label="菜品名称"
+          ></el-table-column>
+          <el-table-column
+            prop="foodCat"
+            width="200"
+            label="分类"
+          ></el-table-column>
+          <el-table-column
+            prop="price"
+            width="200"
+            label="价格"
+          ></el-table-column>
+          <el-table-column
+            prop="foodType"
+            width="200"
+            label="菜品类型"
+          ></el-table-column>
           <el-table-column prop="createTime" label="创建时间"></el-table-column>
 
           <el-table-column
             fixed="right"
-            style="display:none;"
+            style="display: none"
             align="center"
             label="操作"
             width="100"
           >
             <template slot-scope="scope">
-              <el-button @click="goToDetail(scope.row.id)" type="text" size="small">详情</el-button>
-              <el-button @click="deleteFood(scope.row)" type="text" size="small">删除</el-button>
+              <el-button
+                @click="goToDetail(scope.row.id)"
+                type="text"
+                size="small"
+                >详情</el-button
+              >
+              <el-button @click="deleteFood(scope.row)" type="text" size="small"
+                >删除</el-button
+              >
             </template>
           </el-table-column>
         </el-table>
       </div>
-      <div class="pagination" style="margin-top: 15px;">
+      <div class="pagination" style="margin-top: 15px">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -65,7 +104,12 @@
         >
           <div class="wrapper">
             <div>
-              <el-form :model="form" :rules="rules" label-width="100px" ref="ruleForm">
+              <el-form
+                :model="form"
+                :rules="rules"
+                label-width="100px"
+                ref="ruleForm"
+              >
                 <el-row>
                   <el-col :span="24">
                     <div class="grid-content bg-purple">
@@ -79,8 +123,14 @@
                           :on-success="handleFoodImgSuccess"
                           :before-upload="beforeFoodImgUpload"
                         >
-                          <img v-if="form.foodThumb" :src="form.foodThumb" class="thumb" />
-                          <i v-else class="el-icon-plus avatar-uploader-icon">{{form.foodThumb}}</i>
+                          <img
+                            v-if="form.foodThumb"
+                            :src="form.foodThumb"
+                            class="thumb"
+                          />
+                          <i v-else class="el-icon-plus avatar-uploader-icon">{{
+                            form.foodThumb
+                          }}</i>
                         </el-upload>
                       </el-form-item>
                       <el-form-item label="菜品名称：" prop="foodName">
@@ -89,8 +139,23 @@
                           clearable
                           v-model.trim="form.foodName"
                           placeholder="请输入菜品名称"
-                          style="width:180px;"
+                          style="width: 180px"
                         ></el-input>
+                      </el-form-item>
+                      <el-form-item label="菜品分类：" prop="foodCat">
+                        <el-select
+                          v-model.trim="form.foodCat"
+                          placeholder="请选择"
+                          size="small"
+                        >
+                          <el-option
+                            v-for="(item, index) in foodCat"
+                            element-loading-spinner="el-icon-loading"
+                            :key="index"
+                            :label="item"
+                            :value="index"
+                          />
+                        </el-select>
                       </el-form-item>
                       <el-form-item label="描述：" prop="foodDesc">
                         <el-input
@@ -98,7 +163,7 @@
                           clearable
                           v-model.trim="form.foodDesc"
                           placeholder="请输入菜品描述"
-                          style="width:90%;"
+                          style="width: 90%"
                         ></el-input>
                       </el-form-item>
                       <el-form-item label="价格：" prop="price">
@@ -107,22 +172,30 @@
                           clearable
                           v-model.trim="form.price"
                           placeholder="请输入菜品价格"
-                          style="width:180px;"
+                          style="width: 180px"
                         ></el-input>
                       </el-form-item>
                       <el-form-item label="菜品类型：" prop="foodType">
-                        <el-select v-model.trim="form.foodType" placeholder="请选择" size="small">
+                        <el-select
+                          v-model.trim="form.foodType"
+                          placeholder="请选择"
+                          size="small"
+                        >
                           <el-option
-                            v-for="(ft, index) in mfoodType"
+                            v-for="(item, index) in foodType"
                             element-loading-spinner="el-icon-loading"
                             :key="index"
-                            :label="ft.title"
-                            :value="ft.code"
+                            :label="item"
+                            :value="index"
                           />
                         </el-select>
                       </el-form-item>
-                      <el-form-item label="创建时间：" v-if="isAdd == false" prop="createTime">
-                        <span>{{form.createTime}}</span>
+                      <el-form-item
+                        label="创建时间："
+                        v-if="isAdd == false"
+                        prop="createTime"
+                      >
+                        <span>{{ form.createTime }}</span>
                       </el-form-item>
                     </div>
                   </el-col>
@@ -132,7 +205,12 @@
           </div>
           <span slot="footer" class="dialog-footer">
             <el-button @click="cancelForm()" size="mini">取消</el-button>
-            <el-button type="primary" @click="submitAddForm('ruleForm')" size="mini">保存</el-button>
+            <el-button
+              type="primary"
+              @click="submitAddForm('ruleForm')"
+              size="mini"
+              >保存</el-button
+            >
           </span>
         </el-dialog>
       </div>
@@ -159,6 +237,7 @@ export default {
         id: 0,
         foodThumb: "",
         foodName: "",
+        foodCat: "",
         foodDesc: "",
         price: "",
         foodType: "",
@@ -171,10 +250,16 @@ export default {
       pageIndex: 1,
       pageSize: 15,
       pageTotal: 0,
-      mfoodType: [
-        { code: "NORMAL", title: "可存餐柜" },
-        { code: "FLUIDS", title: "非存餐柜" },
-      ],
+      foodType: {
+        NORMAL: "可存餐柜",
+        FLUIDS: "非存餐柜",
+      },
+      foodCat: {
+        HOT: "热菜",
+        COLD: "凉菜",
+        STAPLE: "主食",
+        PASTRY: "面点",
+      },
       rules: {
         foodName: [
           {
@@ -197,6 +282,10 @@ export default {
             trigger: ["blur", "change"],
           },
         ],
+        foodCat: [{ required: true, message: "请选择分类", trigger: "change" }],
+        foodType: [
+          { required: true, message: "请选择类型", trigger: "change" },
+        ],
       },
     };
   },
@@ -210,24 +299,16 @@ export default {
       KitchenModule.getFoodList(datas).then((res) => {
         let list = [];
         let total = 0;
-        let curFoodType = "";
         let rowId = (pageIndex - 1) * pageSize + 1;
         if (res.data) {
           res.data.list.forEach((el, i) => {
-            curFoodType = this.mfoodType[0].title;
-            this.mfoodType.forEach((v, i) => {
-              if (v.code == el.food_type) {
-                curFoodType = v.title;
-                return;
-              }
-            });
-
             list.push({
               rowId: rowId,
               id: el.id,
               foodName: el.foodName,
+              foodCat: this.foodCat[el.foodCat],
               price: el.price,
-              foodType: curFoodType,
+              foodType: this.foodType[el.foodType],
               createTime: el.createTime,
             });
             rowId++;
@@ -247,9 +328,10 @@ export default {
             id: data.id,
             foodThumb: data.foodThumb,
             foodName: data.foodName,
+            foodCat: data.foodCat,
             foodDesc: data.foodDesc,
             price: data.price,
-            foodType: data.food_type,
+            foodType: data.foodType,
             createTime: data.createTime,
           };
 
@@ -261,6 +343,7 @@ export default {
       let data = {
         foodThumb: this.form.foodThumb,
         foodName: this.form.foodName,
+        foodCat: this.form.foodCat,
         foodDesc: this.form.foodDesc,
         foodType: this.form.foodType,
         price: this.form.price,
@@ -288,6 +371,7 @@ export default {
         id: this.form.id,
         foodThumb: this.form.foodThumb,
         foodName: this.form.foodName,
+        foodCat: this.form.foodCat,
         foodDesc: this.form.foodDesc,
         foodType: this.form.foodType,
         price: this.form.price,

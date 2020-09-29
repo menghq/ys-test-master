@@ -16,7 +16,7 @@ module.exports = {
         // target: 'http://meal-admin.food-edu.net/apis/', // 接口域名
         //target: 'http://admin.huomei.youshan.co/apis/', // 新接口域名
         ws: true,
-        changeOrigin: true, //是否跨域
+        changeOrigin: false, //是否跨域
         pathRewrite: {
           '^/apis': ''
         }
@@ -24,7 +24,7 @@ module.exports = {
     },
 
     // Various Dev Server settings
-    host: '0.0.0.0', // can be overwritten by process.env.HOST
+    host: '127.0.0.1', // can be overwritten by process.env.HOST
     port: 9978, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
