@@ -12,14 +12,9 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/apis': {
-<<<<<<< HEAD
-        target: 'http://localhost:8078/apis/', // 接口域名
-        //target: 'http://meal-admin.food-edu.net/apis/', // 接口域名
-=======
-        // target: 'http://localhost:8078/apis/', // 接口域名
+         target: 'http://localhost:8078/apis/', // 接口域名
         // target: 'http://meal-admin.food-edu.net/apis/', // 接口域名
-        target: 'http://admin.huomei.youshan.co/apis/', // 新接口域名
->>>>>>> ce7f4512b239511820862a01b113232a1e82b7f6
+        //target: 'http://admin.huomei.youshan.co/apis/', // 新接口域名
         ws: true,
         changeOrigin: true, //是否跨域
         pathRewrite: {
