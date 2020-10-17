@@ -66,9 +66,6 @@
                 v-model="formConfig.breakfastTime"
                 value-format="HH:mm:ss"
                 style="width:140px;"
-                :picker-options="{
-      selectableRange: '05:00:00 - 09:00:00'
-    }"
                 placeholder="用餐时间"
               ></el-time-picker>
               <el-input
@@ -90,9 +87,6 @@
                 v-model="formConfig.lunchTime"
                 value-format="HH:mm:ss"
                 style="width:140px;"
-                :picker-options="{
-      selectableRange: '10:00:00 - 14:00:00'
-    }"
                 placeholder="用餐时间"
               ></el-time-picker>
               <el-input
@@ -114,9 +108,6 @@
                 v-model="formConfig.dinnerTime"
                 value-format="HH:mm:ss"
                 style="width:140px;"
-                :picker-options="{
-      selectableRange: '16:00:00 - 20:00:00'
-    }"
                 placeholder="用餐时间"
               ></el-time-picker>
               <el-input

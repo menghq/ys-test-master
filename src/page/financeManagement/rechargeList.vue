@@ -18,7 +18,7 @@
                   align="right"
                 ></el-date-picker>
               </el-form-item>
-              <el-form-item prop="userName" style="width:150px;">
+              <el-form-item prop="userName" style="width: 150px">
                 <el-input
                   size="small"
                   clearable
@@ -28,24 +28,53 @@
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item style="float: right;">
-                <el-button size="small" type="primary" @click="submitForm('formInline')">查询</el-button>
-                <el-button size="small" icon="el-icon-plus" type="default" @click="addRecharge">手动充值</el-button>
-                <el-button size="small" icon="el-icon-plus" type="default" @click="exportRecharge">导出数据</el-button>
+              <el-form-item style="float: right">
+                <el-button
+                  size="small"
+                  type="primary"
+                  @click="submitForm('formInline')"
+                  >查询</el-button
+                >
+                <el-button
+                  size="small"
+                  icon="el-icon-plus"
+                  type="default"
+                  @click="addRecharge"
+                  >手动充值</el-button
+                >
+                <el-button
+                  size="small"
+                  icon="el-icon-plus"
+                  type="default"
+                  @click="exportRecharge"
+                  >导出数据</el-button
+                >
               </el-form-item>
             </el-col>
           </el-row>
         </el-form>
       </div>
-      <div class="tableCom" style="margin-top: 15px;">
+      <div class="tableCom" style="margin-top: 15px">
         <el-table :data="listData" border style="width: 100%">
-          <el-table-column prop="rowId" label="序号" width="50"></el-table-column>
-          <el-table-column prop="createTime" width="200" label="充值时间"></el-table-column>
-          <el-table-column prop="dinerName" width="200" label="人员姓名"></el-table-column>
+          <el-table-column
+            prop="rowId"
+            label="序号"
+            width="50"
+          ></el-table-column>
+          <el-table-column
+            prop="createTime"
+            width="200"
+            label="充值时间"
+          ></el-table-column>
+          <el-table-column
+            prop="dinerName"
+            width="200"
+            label="人员姓名"
+          ></el-table-column>
           <el-table-column prop="money" label="金额"></el-table-column>
         </el-table>
       </div>
-      <div class="pagination" style="margin-top: 15px;">
+      <div class="pagination" style="margin-top: 15px">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -56,17 +85,27 @@
         ></el-pagination>
       </div>
       <div class="dialogBox">
-        <el-dialog title="手动充值" :visible.sync="dialogVisible" :show-close="false" width="750px">
+        <el-dialog
+          title="手动充值"
+          :visible.sync="dialogVisible"
+          :show-close="false"
+          width="750px"
+        >
           <div class="wrapper">
             <div>
-              <el-form :model="form" :rules="rules" label-width="120px" ref="ruleForm">
+              <el-form
+                :model="form"
+                :rules="rules"
+                label-width="120px"
+                ref="ruleForm"
+              >
                 <el-form-item label="部门：" prop="gradeId">
                   <el-select
                     clearable
                     @change="handleFromGradeChange"
                     v-model.trim="form.gradeId"
                     placeholder="请选择部门"
-                    style="width:150px;"
+                    style="width: 150px"
                     size="small"
                   >
                     <el-option
@@ -101,15 +140,22 @@
                     clearable
                     v-model.trim="form.amount"
                     placeholder="请输入充值金额"
-                    style="width:180px;"
+                    style="width: 180px"
                   ></el-input>
                 </el-form-item>
               </el-form>
             </div>
           </div>
           <span slot="footer" class="dialog-footer">
-            <el-button @click="cancelForm('ruleForm')" size="mini">取 消</el-button>
-            <el-button type="primary" @click="submitAddForm('ruleForm')" size="mini">确 定</el-button>
+            <el-button @click="cancelForm('ruleForm')" size="mini"
+              >取 消</el-button
+            >
+            <el-button
+              type="primary"
+              @click="submitAddForm('ruleForm')"
+              size="mini"
+              >确 定</el-button
+            >
           </span>
         </el-dialog>
       </div>
@@ -177,46 +223,47 @@ export default {
     };
   },
   methods: {
-    exportRecharge(){
-
+    exportRecharge() {
       let datas = {
         dateRange:
           this.formInline.dateVals == null ? [] : this.formInline.dateVals,
         action: "RECHARGE",
         dinerName: this.formInline.dinerName,
-        isPage: 0
+        isPage: 0,
       };
 
-      FinanceModule.getWalletLogList(datas).then(res => {
-        let list = [];
-        if (res.data) {
-          res.data.list.forEach((el, i) => {
-            list.push({
-              rowId: i+1,
-              id: el.id,
-              outTradeNo: el.outTradeNo,
-              dinerName: el.dinerName,
-              action: this.transactionTypeArr[el.transactionType],
-              money: el.money,
-              createTime: el.createTime,
+      FinanceModule.getWalletLogList(datas)
+        .then((res) => {
+          let list = [];
+          if (res.data) {
+            res.data.list.forEach((el, i) => {
+              list.push({
+                rowId: i + 1,
+                id: el.id,
+                outTradeNo: el.outTradeNo,
+                dinerName: el.dinerName,
+                action: this.transactionTypeArr[el.transactionType],
+                money: el.money,
+                createTime: el.createTime,
+              });
             });
-          });
 
-          const tableHeader = ['序号', '充值时间', '人员姓名', '金额']
-          const tableKey = ['rowId', 'createTime', 'dinerName', 'money']
-          outExportExcel(
-            tableHeader,
-            tableKey,
-            list,
-            '充值记录报表-'+formatTime(new Date())
-          )
-        }
-      }).catch(err=>{
-        this.$message({
-          type: 'error',
-          message: '导出失败!'
+            const tableHeader = ["序号", "充值时间", "人员姓名", "金额"];
+            const tableKey = ["rowId", "createTime", "dinerName", "money"];
+            outExportExcel(
+              tableHeader,
+              tableKey,
+              list,
+              "充值记录报表-" + formatTime(new Date())
+            );
+          }
+        })
+        .catch((err) => {
+          this.$message({
+            type: "error",
+            message: "导出失败!",
+          });
         });
-      });
     },
     getWalletLogList(pageIndex = 1, pageSize = 15) {
       let datas = {
@@ -289,6 +336,12 @@ export default {
       if (this.$refs["ruleForm"]) {
         this.$refs["ruleForm"].resetFields();
       }
+
+      this.form.gradeId = "";
+      this.form.dinerId = "";
+      this.form.gradeData = [];
+      this.form.dinerData = [];
+      this.form.amount = "";
       this.dialogVisible = true;
       this.getFormGradeSelect();
     },
@@ -330,37 +383,37 @@ export default {
     handleFromGradeChange() {
       this.getFormDinerSelect();
     },
-    addRechargeInfo () {
+    addRechargeInfo() {
       let datas = {
         gradeId: Number(this.form.gradeId),
         dinerId: Number(this.form.dinerId),
         amount: this.form.amount,
       };
-      FinanceModule.addRechargeInfo(datas).then(res => {
+      FinanceModule.addRechargeInfo(datas).then((res) => {
         if (res.data) {
           if (res.data.err == 0) {
             this.$message({
-              type: 'success',
-              message: '保存成功!'
+              type: "success",
+              message: "保存成功!",
             });
             this.dialogVisible = false;
             this.getWalletLogList();
           } else if (res.data.err == 1) {
             this.$message({
-              type: 'error',
-              message: '无效的人员'
+              type: "error",
+              message: "无效的人员",
             });
           }
         }
       });
     },
-    submitAddForm (formName) {
+    submitAddForm(formName) {
       let that = this;
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.addRechargeInfo();
         } else {
-          console.log('error submit!!');
+          console.log("error submit!!");
           return false;
         }
       });

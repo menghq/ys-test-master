@@ -56,11 +56,6 @@
             width="200"
             label="价格"
           ></el-table-column>
-          <el-table-column
-            prop="foodType"
-            width="200"
-            label="菜品类型"
-          ></el-table-column>
           <el-table-column prop="createTime" label="创建时间"></el-table-column>
 
           <el-table-column
@@ -174,21 +169,6 @@
                           placeholder="请输入菜品价格"
                           style="width: 180px"
                         ></el-input>
-                      </el-form-item>
-                      <el-form-item label="菜品类型：" prop="foodType">
-                        <el-select
-                          v-model.trim="form.foodType"
-                          placeholder="请选择"
-                          size="small"
-                        >
-                          <el-option
-                            v-for="(item, index) in foodType"
-                            element-loading-spinner="el-icon-loading"
-                            :key="index"
-                            :label="item"
-                            :value="index"
-                          />
-                        </el-select>
                       </el-form-item>
                       <el-form-item
                         label="创建时间："
@@ -345,7 +325,6 @@ export default {
         foodName: this.form.foodName,
         foodCat: this.form.foodCat,
         foodDesc: this.form.foodDesc,
-        foodType: this.form.foodType,
         price: this.form.price,
       };
       KitchenModule.addFoodInfo(data).then((res) => {
@@ -373,7 +352,6 @@ export default {
         foodName: this.form.foodName,
         foodCat: this.form.foodCat,
         foodDesc: this.form.foodDesc,
-        foodType: this.form.foodType,
         price: this.form.price,
       };
       OrderModule.updateFoodInfo(data).then((res) => {

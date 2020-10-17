@@ -6,75 +6,141 @@
           <el-row>
             <el-col :span="3" v-for="(item, index) in dateData" :key="index">
               <el-form-item>
-                <el-button size="small" :type="dateSelect == item.date ? 'primary' : 'default'" @click="changeDate(item.date)">
-                  {{item.date}}({{item.weekday}})</el-button>
+                <el-button
+                  size="small"
+                  :type="dateSelect == item.date ? 'primary' : 'default'"
+                  @click="changeDate(item.date)"
+                >
+                  {{ item.date }}({{ item.weekday }})</el-button
+                >
               </el-form-item>
             </el-col>
           </el-row>
         </el-form>
       </div>
-      <el-row>
+      <el-row style="min-height: 500px">
         <el-col :span="6">
-          <el-menu :default-active="defaultMenuActive" :default-openeds="defaultMenuOpeneds" :unique-opened="true" @open="changeMenu">
-            <el-submenu v-for="(group, index) in menuData" :key="index" :index="group.mealTime">
+          <el-menu style="min-height: 500px">
+            <el-menu-item
+              v-for="(group, index) in menuData"
+              :key="index"
+              :index="group.mealTime"
+              @click="changeMenuItem(group.mealTime)"
+            >
               <template slot="title">
                 <i class="el-icon-burger"></i>
-                <span>{{group.name}}</span>
+                <span>{{ group.name }}</span>
               </template>
-              <el-menu-item-group>
-                <el-menu-item v-for="(school, idx) in group.schoolList" :key="idx" :index="index + '-' + idx"
-                  @click="changeMenuItem(group.mealTime, school.schoolId)">
-                  {{school.schoolName}}({{school.foodAmount}}份)</el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
+            </el-menu-item>
           </el-menu>
         </el-col>
         <el-col :span="18">
-          <div class="tableCom" style="margin-top: 15px;" v-if="listAllData">
+          <div class="tableCom" style="margin-top: 15px" v-if="listAllData">
             <el-row v-for="(group, index) in listAllData" :key="index">
-              <el-row>
-                {{group.name}} 合计：{{group.foodAmount}}份
-              </el-row>
-              <el-table :data="group.foodList" highlight-current-row border style="width: 100%">
-                <el-table-column prop="rowId" label='序号' width="50">
+              <el-row> {{ group.name }} 合计：{{ group.foodAmount }}份 </el-row>
+              <el-table
+                :data="group.foodList"
+                highlight-current-row
+                border
+                style="width: 100%"
+              >
+                <el-table-column prop="rowId" label="序号" width="50">
                 </el-table-column>
-                <el-table-column prop="foodName" label='菜品'>
+                <el-table-column prop="foodName" label="菜品">
                 </el-table-column>
-                <el-table-column prop="foodAmount" label='份数'>
+                <el-table-column prop="foodAmount" label="份数">
                 </el-table-column>
               </el-table>
             </el-row>
           </div>
-          <div class="tableCom" style="margin-top: 15px;" v-if="Object.keys(listGradeData).length > 0">
-            <el-tabs v-model="detailSelect" type="card" @tab-click="handleTabClick">
-              <el-tab-pane label="部门总览" name="grade">
-                <el-row v-for="(group, index) in listGradeData" :key="index">
-                  <el-row>
-                    {{group.name}} 合计：{{group.foodAmount}}份
-                  </el-row>
-                  <el-table :data="group.foodList" highlight-current-row border style="width: 100%">
-                    <el-table-column prop="rowId" label='序号' width="50">
-                    </el-table-column>
-                    <el-table-column prop="foodName" label='菜品'>
-                    </el-table-column>
-                    <el-table-column prop="foodAmount" label='份数'>
-                    </el-table-column>
-                  </el-table>
-                </el-row>
-              </el-tab-pane>
-              <el-tab-pane label="订单明细" name="order">
-
-                <el-table :data="listOrderData" highlight-current-row border style="width: 100%">
-                  <el-table-column prop="rowId" label='序号' width="50">
+          <div
+            class="tableCom"
+            style="margin-top: 15px"
+            v-if="Object.keys(listKitchenData).length > 0"
+          >
+            <el-tabs
+              v-model="detailSelect"
+              type="card"
+              @tab-click="handleTabClick"
+            >
+              <el-row>
+                <el-button
+                  size="small"
+                  style="float: right; margin-left: 10px"
+                  type="primary"
+                  @click="export1('locker')"
+                  >导出存柜</el-button
+                >
+                <el-button
+                  size="small"
+                  style="float: right"
+                  type="primary"
+                  @click="export1('kitchen')"
+                  >导出生产</el-button
+                >
+              </el-row>
+              <el-tab-pane label="生产计划" name="kitchen">
+                <el-table
+                  :data="listKitchenData"
+                  highlight-current-row
+                  border
+                  style="width: 100%"
+                >
+                  <el-table-column prop="rowId" label="序号" width="50">
                   </el-table-column>
-                  <el-table-column prop="foodName" label='菜品'>
+                  <el-table-column prop="foodName" label="菜品">
                   </el-table-column>
-                  <el-table-column prop="dinerName" label='姓名'>
-                  </el-table-column>
-                  <el-table-column prop="gradeName" label='部门'>
+                  <el-table-column prop="foodQty" label="数量">
                   </el-table-column>
                 </el-table>
-
+              </el-tab-pane>
+              <el-tab-pane label="存柜计划" name="locker">
+                <el-table
+                  :data="listLockerData"
+                  highlight-current-row
+                  border
+                  style="width: 100%"
+                >
+                  <el-table-column prop="rowId" label="热菜序号" width="50">
+                  </el-table-column>
+                  <el-table-column prop="foodName" label="热菜">
+                  </el-table-column>
+                  <el-table-column prop="foodQty" label="数量">
+                  </el-table-column>
+                  <el-table-column label="存柜序号">
+                    <template slot-scope="scope">
+                      <div
+                        class="sub-row"
+                        v-for="(item, i1) in scope.row.foodList"
+                        v-bind:key="i1"
+                      >
+                        {{ item.lockerId }}
+                      </div>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="主食">
+                    <template slot-scope="scope">
+                      <div
+                        class="sub-row"
+                        v-for="(item, i1) in scope.row.foodList"
+                        v-bind:key="i1"
+                      >
+                        {{ item.foodName }}
+                      </div>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="数量">
+                    <template slot-scope="scope">
+                      <div
+                        class="sub-row"
+                        v-for="(item, i1) in scope.row.foodList"
+                        v-bind:key="i1"
+                      >
+                        {{ item.foodQty }}
+                      </div>
+                    </template>
+                  </el-table-column>
+                </el-table>
               </el-tab-pane>
             </el-tabs>
           </div>
@@ -86,23 +152,23 @@
 <script>
 import { OrderModule } from "@/api/common";
 export default {
-  name: 'orderList',
-  data () {
+  name: "orderList",
+  data() {
     return {
       dialogVisible: false,
       select: {
         mealDate: "",
-        mealTime: '',
+        mealTime: "",
         schoolId: 0,
       },
       mealTimeArr: {
-        'BREAKFAST': '早餐',
-        'LUNCH': '午餐',
-        'DINNER': '晚餐'
+        BREAKFAST: "早餐",
+        LUNCH: "午餐",
+        DINNER: "晚餐",
       },
       defaultMenuActive: "",
       defaultMenuOpeneds: [],
-      detailSelect: "grade",
+      detailSelect: "kitchen",
       schoolSelect: "",
       dateSelect: "",
       mealTimeSelect: "",
@@ -114,101 +180,112 @@ export default {
       listGradeData: [],
       listClassData: [],
       listOrderData: [],
+      listKitchenData: [],
+      listLockerData: [],
       menuData: [],
-    }
+    };
   },
   methods: {
-    formatAmount (val) {
-      var str = (val * 100 / 100).toFixed(2) + '';
-      var intSum = str.substring(0, str.indexOf(".")).replace(/\B(?=(?:\d{3})+$)/g, ',');//取到整数部分
-      var dot = str.substring(str.length, str.indexOf("."))//取到小数部分搜索
+    formatAmount(val) {
+      var str = ((val * 100) / 100).toFixed(2) + "";
+      var intSum = str
+        .substring(0, str.indexOf("."))
+        .replace(/\B(?=(?:\d{3})+$)/g, ","); //取到整数部分
+      var dot = str.substring(str.length, str.indexOf(".")); //取到小数部分搜索
       var ret = intSum + dot;
       return ret;
     },
-    formatNumber (str) {
-      var intSum = str.replace(/\B(?=(?:\d{3})+$)/g, ',');//取到整数部分
+    formatNumber(str) {
+      var intSum = str.replace(/\B(?=(?:\d{3})+$)/g, ","); //取到整数部分
       return intSum;
     },
-    changeDate (date) {
+    changeDate(date) {
       this.dateSelect = date;
       this.getAssignMenu();
     },
-    changeMenu (i) {
+    changeMenu(i) {
+      this.listGradeData = [];
+      this.listOrderData = [];
+      this.listKitchenData = [];
+      this.listLockerData = [];
       this.getAssignMealTimeList(i);
     },
-    changeMenuItem (mealTime, schoolId) {
+    changeMenuItem(mealTime) {
       this.select.mealTime = mealTime;
-      this.select.schoolId = schoolId;
-      this.getAssignGradeList();
+      this.select.schoolId = 1;
+      this.detailSelect = "kitchen";
+      this.getAssignKitchenList();
     },
-    handleTabClick (tab, event) {
+    handleTabClick(tab, event) {
       let name = tab.name;
       console.log(name);
-      if (name == 'grade') {
+      if (name == "grade") {
         this.getAssignGradeList();
-      } else if (name == 'class') {
+      } else if (name == "class") {
         this.getAssignClassList();
-      } else if (name == 'order') {
+      } else if (name == "order") {
         this.getAssignOrderList();
+      } else if (name == "kitchen") {
+        this.getAssignKitchenList();
+      } else if (name == "locker") {
+        this.getAssignLockerList();
       }
     },
-    clearSelect () {
+    clearSelect() {
       this.select = {
         mealDate: "",
-        mealTime: '',
+        mealTime: "",
         schoolId: 0,
       };
     },
-    clearList () {
+    clearList() {
       this.select = {
         mealDate: "",
-        mealTime: '',
+        mealTime: "",
         schoolId: 0,
       };
     },
-    getAssignMenu () {
+    getAssignMenu() {
       this.menuData = [];
       this.mealTimeSelect = "";
       this.listAllData = [];
       this.listGradeData = [];
+      this.listKitchenData = [];
+      this.listLockerData = [];
       let datas = {
         mealDate: this.dateSelect,
       };
-      OrderModule.getAssignMenu(datas).then(res => {
+      OrderModule.getAssignMenu(datas).then((res) => {
         let list = [];
         if (res.data) {
           res.data.list.forEach((el, i) => {
             let schoolList = [];
             el.foodList.forEach((e, j) => {
               schoolList.push({
-
                 schoolId: e.schoolId,
                 schoolName: e.schoolName,
                 foodAmount: e.foodAmount,
-
               });
             });
 
             list.push({
-
               name: this.mealTimeArr[el.mealTime],
               mealTime: el.mealTime,
-              schoolList: schoolList
-
+              schoolList: schoolList,
             });
           });
         }
         this.menuData = list;
         this.defaultMenuActive = "";
         this.defaultMenuOpeneds = [];
-        this.getAssignAllList();
+        // this.getAssignAllList();
       });
     },
-    getAssignAllList () {
+    getAssignAllList() {
       let datas = {
         mealDate: this.dateSelect,
       };
-      OrderModule.getAssignAllList(datas).then(res => {
+      OrderModule.getAssignAllList(datas).then((res) => {
         let list = [];
         if (res.data) {
           res.data.list.forEach((el, i) => {
@@ -216,35 +293,30 @@ export default {
             let foodList = [];
             el.foodList.forEach((e, j) => {
               foodList.push({
-
                 rowId: rowId,
                 foodName: e.foodName,
                 foodAmount: e.foodAmount,
-
               });
               rowId++;
             });
 
             list.push({
-
               name: this.mealTimeArr[el.mealTime],
               foodAmount: el.foodAmount,
 
-
               foodList: foodList,
-
             });
           });
         }
         this.listAllData = list;
       });
     },
-    getAssignMealTimeList (mealTime) {
+    getAssignMealTimeList(mealTime) {
       let datas = {
         mealDate: this.dateSelect,
         mealTime: mealTime,
       };
-      OrderModule.getAssignMealTimeList(datas).then(res => {
+      OrderModule.getAssignMealTimeList(datas).then((res) => {
         let list = [];
         if (res.data) {
           res.data.list.forEach((el, i) => {
@@ -252,37 +324,33 @@ export default {
             let foodList = [];
             el.foodList.forEach((e, j) => {
               foodList.push({
-
                 rowId: rowId,
                 foodName: e.foodName,
                 foodAmount: e.foodAmount,
-
               });
               rowId++;
             });
 
             list.push({
-
               name: this.mealTimeArr[el.mealTime],
               foodAmount: el.foodAmount,
 
               foodList: foodList,
-
             });
           });
         }
         this.listAllData = list;
       });
     },
-    getAssignGradeList () {
+    getAssignGradeList() {
       this.listAllData = [];
       this.listGradeData = [];
       let datas = {
         mealDate: this.dateSelect,
         mealTime: this.select.mealTime,
-        schoolId: this.select.schoolId
+        schoolId: this.select.schoolId,
       };
-      OrderModule.getAssignGradeList(datas).then(res => {
+      OrderModule.getAssignGradeList(datas).then((res) => {
         let list = [];
         if (res.data) {
           res.data.list.forEach((el, i) => {
@@ -290,104 +358,90 @@ export default {
             let foodList = [];
             el.foodList.forEach((e, j) => {
               foodList.push({
-
                 rowId: rowId,
                 foodName: e.foodName,
                 foodAmount: e.foodAmount,
-
               });
               rowId++;
             });
 
             list.push({
-
               name: el.gradeName,
               foodAmount: el.foodAmount,
 
               foodList: foodList,
-
             });
           });
         }
         this.listGradeData = list;
       });
     },
-    getAssignClassList () {
+    getAssignClassList() {
       this.listAllData = [];
       this.listClassData = [];
       let datas = {
         mealDate: this.dateSelect,
         mealTime: this.select.mealTime,
-        schoolId: this.select.schoolId
+        schoolId: this.select.schoolId,
       };
-      OrderModule.getAssignClassList(datas).then(res => {
+      OrderModule.getAssignClassList(datas).then((res) => {
         let list = [];
         if (res.data) {
           res.data.list.forEach((el, i) => {
             let rowId = 1;
             let classList = [];
             el.foodList.forEach((e, j) => {
-
               let foodList = [];
               e.foodList.forEach((f, k) => {
                 foodList.push({
-
                   foodName: f.foodName,
                   foodAmount: f.foodAmount,
-
                 });
               });
               classList.push({
-
                 rowId: rowId,
                 className: e.className,
                 foodAmount: e.foodAmount,
 
                 foodList: foodList,
-
               });
               rowId++;
             });
 
             list.push({
-
               name: el.gradeName,
               foodAmount: el.foodAmount,
 
-              foodId: el.foodId.split(','),
-              foodName: el.foodName.split(','),
+              foodId: el.foodId.split(","),
+              foodName: el.foodName.split(","),
 
               classList: classList,
-
             });
           });
         }
         this.listClassData = list;
       });
     },
-    getAssignOrderList () {
+    getAssignOrderList() {
       this.listAllData = [];
       this.listOrderData = [];
       let datas = {
         mealDate: this.dateSelect,
         mealTime: this.select.mealTime,
-        schoolId: this.select.schoolId
+        schoolId: this.select.schoolId,
       };
-      OrderModule.getAssignOrderList(datas).then(res => {
+      OrderModule.getAssignOrderList(datas).then((res) => {
         let list = [];
         let rowId = 1;
         if (res.data) {
           res.data.list.forEach((el, i) => {
-
             list.push({
-
               rowId: rowId,
               foodName: el.foodName,
               dinerName: el.dinerName,
               schoolName: el.schoolName,
               gradeName: el.gradeName,
               className: el.className,
-
             });
             rowId++;
           });
@@ -395,8 +449,106 @@ export default {
         this.listOrderData = list;
       });
     },
-    getAssignDate () {
-      OrderModule.getAssignDate().then(res => {
+    getAssignKitchenList() {
+      this.listAllData = [];
+      this.listKitchenData = [];
+      let datas = {
+        mealDate: this.dateSelect,
+        mealTime: this.select.mealTime,
+        schoolId: this.select.schoolId,
+      };
+      OrderModule.getAssignKitchenList(datas).then((res) => {
+        let list = [];
+        let rowId = 1;
+        if (res.data) {
+          res.data.list.forEach((el, i) => {
+            list.push({
+              rowId: rowId,
+              foodName: el.foodName,
+              foodQty: el.foodQty,
+            });
+            rowId++;
+          });
+        }
+        this.listKitchenData = list;
+      });
+    },
+    getAssignLockerList() {
+      this.listAllData = [];
+      this.listLockerData = [];
+      let datas = {
+        mealDate: this.dateSelect,
+        mealTime: this.select.mealTime,
+        schoolId: this.select.schoolId,
+      };
+      OrderModule.getAssignLockerList(datas).then((res) => {
+        let list = [];
+        let rowId = 1;
+        if (res.data) {
+          res.data.list.forEach((el, i) => {
+            list.push({
+              rowId: this.getLetterIndex(rowId),
+              foodName: el.foodName,
+              foodQty: el.foodQty,
+              foodList: el.foodList,
+              staple: el.staple,
+            });
+            rowId++;
+          });
+        }
+        this.listLockerData = list;
+      });
+    },
+    getLetterIndex(index) {
+      let arr = {
+        1: "a",
+        2: "b",
+        3: "c",
+        4: "d",
+        5: "e",
+        6: "f",
+        7: "g",
+        8: "h",
+        9: "i",
+        10: "j",
+        11: "k",
+        12: "l",
+        13: "m",
+        14: "n",
+        15: "o",
+        16: "p",
+        17: "q",
+        18: "r",
+        19: "s",
+        20: "t",
+        21: "u",
+        22: "v",
+        23: "w",
+        24: "x",
+        25: "y",
+        26: "z",
+      };
+      return arr[index];
+    },
+    export1(type) {
+      if (type == "kitchen") {
+        let datas = {
+          mealDate: this.dateSelect,
+          mealTime: this.select.mealTime,
+          schoolId: this.select.schoolId,
+        };
+        OrderModule.exportAssignKitchen(datas);
+      } else if (type == "locker") {
+        let datas = {
+          mealDate: this.dateSelect,
+          mealTime: this.select.mealTime,
+          schoolId: this.select.schoolId,
+        };
+        OrderModule.exportAssignLocker(datas);
+      }
+    },
+    getAssignDate() {
+      OrderModule.getAssignDate().then((res) => {
         if (res.data) {
           let list = [];
           res.data.list.forEach((el, i) => {
@@ -405,29 +557,26 @@ export default {
               this.getAssignMenu();
             }
             list.push({
-
               date: el.date,
               weekday: el.weekday,
-
             });
           });
           this.dateData = list;
         }
       });
     },
-    exportForm () {
-      let datas = {
-      };
-      OrderModule.getOrderExport(datas).then(res => {
+    exportForm() {
+      let datas = {};
+      OrderModule.getOrderExport(datas).then((res) => {
         if (res.data) {
         }
       });
     },
   },
-  mounted () {
+  mounted() {
     this.getAssignDate();
-  }
-}
+  },
+};
 </script>
 <style lang="">
 .queryList {
@@ -497,5 +646,13 @@ export default {
 }
 .el-collapse-item__content {
   padding-bottom: 0;
+}
+.sub-row {
+  height: 23px;
+  line-height: 23px;
+  border-bottom: 1px solid #eeeeee;
+}
+.cell .sub-row:last-child {
+  border-bottom: 0;
 }
 </style>

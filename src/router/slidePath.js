@@ -17,7 +17,7 @@ export default [
   {
     path: '/schoolManagement',
     name: 'schoolManagement',
-    role: ["user", "all"],
+    role: [],
     sliderShow: true,
     meta: {
       title: '用餐管理',
@@ -28,7 +28,7 @@ export default [
       {
         path: 'gradeList',
         name: 'gradeList',
-        role: ["user", "all"],
+        role: [],
         sliderShow: true,
         meta: {
           title: '部门列表',
@@ -39,7 +39,7 @@ export default [
       {
         path: 'dinerList',
         name: 'dinerList',
-        role: ["user", "all"],
+        role: [],
         sliderShow: true,
         meta: {
           title: '人员列表',
@@ -50,7 +50,7 @@ export default [
       {
         path: 'cardList',
         name: 'cardList',
-        role: ["user", "all"],
+        role: [],
         sliderShow: true,
         meta: {
           title: '餐卡列表',
@@ -62,7 +62,7 @@ export default [
   {
     path: '/kitchenManagement',
     name: 'kitchenManagement',
-    role: ["user", "all"],
+    role: [],
     sliderShow: true,
     meta: {
       title: '食堂管理',
@@ -73,7 +73,7 @@ export default [
       {
         path: 'foodList',
         name: 'foodList',
-        role: ["user", "all"],
+        role: [],
         sliderShow: true,
         meta: {
           title: '菜品列表',
@@ -84,7 +84,7 @@ export default [
       {
         path: 'menuList',
         name: 'menuList',
-        role: ["user", "all"],
+        role: [],
         sliderShow: true,
         meta: {
           title: '菜单列表',
@@ -95,7 +95,7 @@ export default [
       {
         path: 'assignList',
         name: 'assignList',
-        role: ["order", "all"],
+        role: [],
         sliderShow: true,
         meta: {
           title: '配餐管理',
@@ -107,7 +107,7 @@ export default [
       {
         path: 'orderList',
         name: 'orderList',
-        role: ["user", "all"],
+        role: [],
         sliderShow: true,
         meta: {
           title: '订单管理',
@@ -119,7 +119,7 @@ export default [
   {
     path: '/financeManagement',
     name: 'financeManagement',
-    role: ["user", "all"],
+    role: [],
     sliderShow: true,
     meta: {
       title: '财务管理',
@@ -130,7 +130,7 @@ export default [
       {
         path: 'rechargeList',
         name: 'rechargeList',
-        role: ["user", "all"],
+        role: [],
         sliderShow: true,
         meta: {
           title: '充值记录',
@@ -141,7 +141,7 @@ export default [
       {
         path: 'consumeList',
         name: 'consumeList',
-        role: ["user", "all"],
+        role: [],
         sliderShow: true,
         meta: {
           title: '消费记录',
@@ -152,7 +152,7 @@ export default [
       {
         path: 'statementList',
         name: 'statementList',
-        role: ["user", "all"],
+        role: [],
         sliderShow: true,
         meta: {
           title: '对账统计',
@@ -164,7 +164,7 @@ export default [
   {
     path: '/systemManagement',
     name: 'systemManagement',
-    role: ["all"],
+    role: [],
     sliderShow: true,
     meta: {
       title: '系统管理',
@@ -187,7 +187,7 @@ export default [
       {
         path: 'schoolList',
         name: 'schoolList',
-        role: ["all"],
+        role: [],
         sliderShow: true,
         meta: {
           title: '系统设置',

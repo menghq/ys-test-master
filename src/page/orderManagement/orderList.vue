@@ -39,7 +39,7 @@
             <el-col :span="4">
               <el-form-item style="float: right;">
                 <el-button size="small" type="primary" @click="submitForm('formInline')">查询</el-button>
-                <el-button size="small" icon="el-icon-plus" type="default" @click="addOrder">增补订单</el-button>
+                <el-button size="small" v-show="1==2" icon="el-icon-plus" type="default" @click="addOrder">增补订单</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -87,9 +87,9 @@
           </el-table-column>
           <el-table-column prop="mealTime" label='餐段' width='80'>
           </el-table-column>
-          <el-table-column prop="gradeName" label='部门'>
+          <el-table-column prop="gradeName" label='部门' width='120'>
           </el-table-column>
-          <el-table-column prop="dinerName" label='姓名'>
+          <el-table-column prop="dinerName" label='姓名' width='120'>
           </el-table-column>
           <el-table-column prop="foodName" label='菜品'>
           </el-table-column>
@@ -195,13 +195,16 @@ export default {
         'DINNER': '晚餐'
       },
       orderStatusArr: {
-        'PAID': "未完成",
+        'NOT_PAY': "未支付",
+        'PAID': "已支付",
+        'SHIPPED': "已存柜",
         'FINISH': "已完成",
         'CANCELED': "已退款",
       },
       takeMealModeArr: {
         'CANTEEN': "堂食预定",
         'CABINET': "保温柜预定",
+        'MIX': "混合预定",
         'ORDERMACHINE': "窗口点餐",
       },
       gradeData: [],

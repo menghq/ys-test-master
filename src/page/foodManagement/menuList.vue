@@ -898,19 +898,17 @@ export default {
 }
 
 .food-item .food-name {
-  margin-top: 5px;
-  height: 25px;
-  line-height: 25px;
+  height: 23px;
+  line-height: 23px;
 }
 
 .food-item .food-price {
-  margin-bottom: 5px;
-  height: 25px;
-  line-height: 25px;
+  height: 23px;
+  line-height: 23px;
 }
 
 .food-item button {
-  height: 60px;
+  height: 56px;
 }
 
 .chose-item {
@@ -919,8 +917,10 @@ export default {
 }
 
 .el-checkbox-button__inner {
+  font-size: 12px !important;
   width: 80%;
   border-left: 1px solid #dcdfe6;
+  padding: 10px;
 }
 
 .food-table .el-table_2_column_10 {
@@ -929,5 +929,18 @@ export default {
 
 .food-table .el-table_2_column_10 .cell {
   padding: 0px !important;
+}
+
+.food-table .cell {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.food-table td {
+  padding: 0 !important;
+}
+
+.el-dialog__body {
+  padding: 0px 30px 20px 30px !important;
 }
 </style>

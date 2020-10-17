@@ -52,6 +52,20 @@ let OrderModule = {
       data: datas
     });
   },
+  getAssignKitchenList: function (datas) {
+    return HttpRequest.getRequest({
+      method: "POST",
+      url: `${apiUrl}/assign/list/kitchen`,
+      data: datas
+    });
+  },
+  getAssignLockerList: function (datas) {
+    return HttpRequest.getRequest({
+      method: "POST",
+      url: `${apiUrl}/assign/list/locker`,
+      data: datas
+    });
+  },
   getAssignCategory: function () {
     return HttpRequest.getRequest({
       method: "GET",
@@ -432,6 +446,18 @@ let OrderModule = {
     return HttpRequest.getRequest({
       method: "GET",
       url: `${apiUrl}/kitchenLicense/delete/${id}`,
+    });
+  },
+  exportAssignKitchen: function (datas) {
+    return HttpRequest.getExcel({
+      url: `${apiUrl}/assign/export/kitchen`,
+      data: datas
+    });
+  },
+  exportAssignLocker: function (datas) {
+    return HttpRequest.getExcel({
+      url: `${apiUrl}/assign/export/locker`,
+      data: datas
     });
   },
 }

@@ -14,6 +14,13 @@
                 <el-input size="small" clearable v-model.trim="formInline.dinerName" placeholder="请输入人员姓名">
                 </el-input>
               </el-form-item>
+              <el-form-item prop="action" style="width:120px;">
+                <el-select clearable v-model.trim="formInline.action" placeholder="请选择类型" size="small">
+                  <el-option element-loading-spinner="el-icon-loading" v-for="(item, index) in actionArr" :key="`${_uid}_${index}`"
+                    :label="item" :value="index">
+                  </el-option>
+                </el-select>
+              </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item style="float: right;">
@@ -28,9 +35,11 @@
         <el-table :data="listData" border style="width: 100%">
           <el-table-column prop="rowId" label='序号' width="50">
           </el-table-column>
-          <el-table-column prop="createTime" width="200" label='消费时间'>
+          <el-table-column prop="createTime" width="200" label='操作时间'>
           </el-table-column>
           <el-table-column prop="dinerName" width="200" label='人员姓名'>
+          </el-table-column>
+          <el-table-column prop="action" label='类型'>
           </el-table-column>
           <el-table-column prop="money" label='金额'>
           </el-table-column>
@@ -56,12 +65,12 @@ export default {
       formInline: {
         dateVals: [],
         schoolId: '',
-        transactionType: '',
+        action: '',
         dinerName: '',
       },
-      transactionTypeArr: {
-        'INCOME': '充值',
-        'REFUND': '提现'
+      actionArr: {
+        'CONSUME': '消费',
+        'REFUND': '退款'
       },
       incomeAmount: '0.00',
       incomeCount: '0',
@@ -77,7 +86,7 @@ export default {
     exportConsume(){
       let datas = {
         dateRange: this.formInline.dateVals == null ? [] : this.formInline.dateVals,
-        action: "CONSUME",
+        action: this.formInline.action,
         dinerName: this.formInline.dinerName,
         isPage: 0
       };
@@ -91,14 +100,14 @@ export default {
               id: el.id,
               outTradeNo: el.outTradeNo,
               dinerName: el.dinerName,
-              transactionType: this.transactionTypeArr[el.transactionType],
+              action: this.actionArr[el.action],
               money: el.money,
               createTime: el.createTime,
             });
           });
 
-          const tableHeader = ['序号', '消费时间', '人员姓名', '金额']
-          const tableKey = ['rowId', 'createTime', 'dinerName', 'money']
+          const tableHeader = ['序号', '操作时间', '人员姓名', '类型', '金额']
+          const tableKey = ['rowId', 'createTime', 'dinerName', 'action', 'money']
           outExportExcel(
             tableHeader,
             tableKey,
@@ -116,7 +125,7 @@ export default {
     getWalletLogList (pageIndex = 1, pageSize = 15) {
       let datas = {
         dateRange: this.formInline.dateVals == null ? [] : this.formInline.dateVals,
-        action: "CONSUME",
+        action: this.formInline.action,
         dinerName: this.formInline.dinerName,
         pageIndex: pageIndex,
         pageSize: pageSize
@@ -137,7 +146,7 @@ export default {
               id: el.id,
               outTradeNo: el.outTradeNo,
               dinerName: el.dinerName,
-              transactionType: this.transactionTypeArr[el.transactionType],
+              action: this.actionArr[el.action],
               money: el.money,
               createTime: el.createTime,
 
